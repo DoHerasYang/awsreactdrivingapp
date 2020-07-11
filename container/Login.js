@@ -3,9 +3,12 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'reac
 import { Auth } from 'aws-amplify'
 import Amplify from '@aws-amplify/core'
 import config from '../aws-exports'
+import {NavigationContainer} from "@react-navigation/native";
+import {createStackNavigator} from "@react-navigation/stack";
 import { Button, FormGroup, FormControl } from "react-bootstrap";
 
 Amplify.configure(config)
+
 export default class Login extends React.Component {
 
     state = {
@@ -23,6 +26,10 @@ export default class Login extends React.Component {
     //         alert("Wrong Input...")
     //     }
     // }
+
+    handleRoute = async (destination) =>{
+        await this.props.navigation.navigate(destination)
+    }
 
     async handleSubmit(event){
         const {username,password} = this.state;
@@ -67,13 +74,17 @@ export default class Login extends React.Component {
                     activeOpacity = {0.3}>
                     <Text style={styles.loginText}>LOG IN</Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={()=> this.handleRoute('SignUp')}>
                     <Text style={styles.loginText}>Sign up</Text>
                 </TouchableOpacity>
             </View>
         );
     }
 }
+
+
+
 
 const styles = StyleSheet.create({
     container: {

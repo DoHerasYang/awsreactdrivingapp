@@ -10,7 +10,17 @@
 
 1. Firstly, You should use the `npm install -g @aws-amplify/cli` command to add the `aws-amplify` into this project file.
 2. Use the command `amplify configure` and follow the Access AWS page hints.
-3. 
+3. You could use the 'aws-export.js' to connect with the remote server.
+
+---
+
+**DownLoad From the Github Usage**:
+
+1.You could use this command to install all the node_modules:  
+
+```
+$ sudo npm install 
+```
 
 ---
 
@@ -27,6 +37,12 @@
 5.Unistall the wrong version: `npm uninstall @react-native-community/netinfo` 
 
 6.Install the Correct Version: `npm install @react-native-community/netinfo@5.9.2`
+
+7.Install the react-native navigation component: `npm install @react-navigation/native`
+
+8.Install the react-native navigation dependencies: `expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view`
+
+9.
 
 ---
 
