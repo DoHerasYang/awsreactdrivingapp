@@ -1,10 +1,8 @@
 import React,{ useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
-import { Auth } from 'aws-amplify'
-import Amplify from '@aws-amplify/core'
-import config from '../aws-exports'
-import {NavigationContainer} from "@react-navigation/native";
-import {createStackNavigator} from "@react-navigation/stack";
+import { Auth } from 'aws-amplify';
+import Amplify from '@aws-amplify/core';
+import config from '../aws-exports';
 import { Button, FormGroup, FormControl } from "react-bootstrap";
 
 Amplify.configure(config)
@@ -28,7 +26,7 @@ export default class Login extends React.Component {
     // }
 
     handleRoute = async (destination) =>{
-        await this.props.navigation.navigate(destination)
+        await this.props.navigation.navigate(destination);
     }
 
     async handleSubmit(event){
@@ -43,6 +41,7 @@ export default class Login extends React.Component {
     }
 
     render(){
+        const { navigate } = this.props.navigation;
         return (
             <View style={styles.container}>
                 <Text style={styles.logo}>Sticker</Text>
@@ -75,15 +74,13 @@ export default class Login extends React.Component {
                     <Text style={styles.loginText}>LOG IN</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={()=> this.handleRoute('SignUp')}>
+                    onPress={()=> navigate('Signup')}>
                     <Text style={styles.loginText}>Sign up</Text>
                 </TouchableOpacity>
             </View>
         );
     }
 }
-
-
 
 
 const styles = StyleSheet.create({

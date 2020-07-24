@@ -24,7 +24,7 @@ $ sudo npm install
 
 ---
 
-**Command Hint**:
+**Command Hint**: (All the command should run with `sudo`)
 
 1.`sudo npm i --save react-bootstrap`
 
@@ -42,7 +42,11 @@ $ sudo npm install
 
 8.Install the react-native navigation dependencies: `expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view`
 
-9.
+9.Install NativeBase :   `npm install native-base --save`
+
+10.Install `expo-font`:  `expo install expo-font`
+
+11.
 
 ---
 

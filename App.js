@@ -1,34 +1,35 @@
-import Login from "./container/Login"
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button} from 'react-native';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createSwitchNavigator, createAppContainer} from "react-navigation";
 
-export default Login
+// import the Pages containers
+import Login from "./container/Login";
+import Signup from './container/Signup';
 
+// Create the Stack for Auth and Login or Sing up Function Pages
+const AuthStackNavigator = createStackNavigator({
+    Initial:{
+        screen: Login,
+        navigationOptions:()=> ({
+            title:'Welcome to this App',
+        }),
+    },
+    Signup:{
+        screen: Signup,
+    },
+});
 
-// import { withAuthenticator } from 'aws-amplify-react-native'
+// Application nav Stack
+const appNav = createSwitchNavigator({
+    Auth: AuthStackNavigator,
+});
 
-// import Amplify from '@aws-amplify/core'
-// import config from './aws-exports'
-// Amplify.configure(config)
+// AppContainer
+const AppContainer = createAppContainer(appNav);
 
-// class App extends React.Component {
-//     render() {
-//         return (
-//             <View style={styles.container}>
-//                 <Text>Open up App.js to start working on your app!</Text>
-//                 <Text>Yo!</Text>
-//             </View>
-//         );
-//     }
-// }
-
-// export default withAuthenticator(App, { includeGreetings: true })
-
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         backgroundColor: '#fff',
-//         alignItems: 'center',
-//         justifyContent: 'center',
-//     },
-// });
+export default class App extends React.Component{
+    render() {
+        return <AppContainer />;
+    }
+}
