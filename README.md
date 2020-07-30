@@ -46,7 +46,9 @@ $ sudo npm install
 
 10.Install `expo-font`:  `expo install expo-font`
 
-11.
+11. Install Drawer `npm install @react-navigation/drawer`
+12. Install Tabs:   `npm install @react-navigation/material-top-tabs react-native-tab-view`
+13. Install 
 
 ---
 
@@ -92,6 +94,24 @@ $ sudo npm install
 + Understand the Basic rule of the Expo.
 
 
+
+### 3. Issues and Solutions
+
+#### 1. If you have problem in starting the expo project, please check your network situation which has connected to the outside network, or use this command: `expo start --offline`.
+
+
+
+### 4.Problem Remain to Fix
+
++ As for Cognito, the use only can receive the email or phone, can't receive both of them. 
+
+  https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-settings-email-phone-verification.html
+
++ If the you would like to install the sub-dependencies of the navigation, you should reinstall the navigation-dependency:
+
+  `expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view`
+
++ 
 
 
 

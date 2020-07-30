@@ -12,7 +12,6 @@ export default class Login extends React.Component {
     state = {
         username: '',
         password: '',
-        user:{},
     };
 
     // validateForm(input_string){
@@ -33,8 +32,7 @@ export default class Login extends React.Component {
         const {username,password} = this.state;
         try {
             const user = await Auth.signIn(username,password);
-            this.setState({user})
-            alert("Successfully Log in!");
+            this.props.navigation.navigate('AuthLoad')
         }catch (e) {
             alert(e.message);
         }
@@ -52,6 +50,8 @@ export default class Login extends React.Component {
                         placeholder="Username"
                         placeholderTextColor="#003f5c"
                         keyboardType='email-address'
+                        autoCapitalize='none'
+                        autoCorrect={false}
                         onChangeText={(username) => this.setState({username})}/>
                 </View>
                 <View style={styles.inputView} >
@@ -62,9 +62,12 @@ export default class Login extends React.Component {
                         placeholder="Password"
                         keyboardType="default"
                         placeholderTextColor="#003f5c"
+                        autoCapitalize='none'
+                        autoCorrect={false}
                         onChangeText={(password) => this.setState({password})}/>
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={()=> navigate('ForgetPassword')}>
                     <Text style={styles.forgot}>Forgot Password?</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
