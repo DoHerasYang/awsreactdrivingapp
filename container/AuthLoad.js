@@ -3,6 +3,7 @@ import {
     StyleSheet,
     View,
     ActivityIndicator,
+    InteractionManager,
 } from 'react-native';
 
 // Import AWS Configure
@@ -30,13 +31,13 @@ export default class AuthLoad extends React.Component {
                 this.setState({aws_userToken: re_Token})
             })
             .catch( (error)=> console.log(error))
-        this.props.navigation.navigate(this.state.aws_userToken.length>10? 'MainPage':'Login');
+        this.props.navigation.navigate(this.state.aws_userToken? 'UserTabs':'Login');
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <ActivityIndicator size="large" color="#999999"/>
+                <ActivityIndicator size="large" color="#0000ff"/>
             </View>
         )
     }

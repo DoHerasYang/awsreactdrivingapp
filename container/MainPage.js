@@ -1,24 +1,19 @@
-import React from 'react'
+import React from 'react';
 import {
     StyleSheet,
     View,
     Text,
-} from 'react-native'
+} from 'react-native';
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
+// Screens
+import UserScreen from "./user/UserScreen";
+
 // User Pages
 const Tab = createMaterialTopTabNavigator();
-
-function UserScreen(){
-    return(
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Home!</Text>
-        </View>
-    )
-}
 
 function SettingScreen(){
     return(
@@ -28,7 +23,7 @@ function SettingScreen(){
     )
 }
 
-export default class HomeScreen extends React.Component {
+export default class MainPage extends React.Component {
     render() {
         return (
             <NavigationContainer>
@@ -41,9 +36,10 @@ export default class HomeScreen extends React.Component {
                         activeTintColor: 'tomato',
                         tabStyle:{
                             borderWidth: 1,
-                            borderBottomColor: '#fff',
-                            borderLeftColor: '#fff',
-                            borderTopColor: '#fff'
+                            borderBottomColor: '#ccccc2',
+                            borderLeftColor: '#ccccc2',
+                            borderTopColor: '#ccccc2',
+                            borderRightColor: '#ccccc2',
                         },
                         inactiveColor: 'gray',
                         showIcon: true,
@@ -71,7 +67,7 @@ export default class HomeScreen extends React.Component {
                                     ? 'ios-list-box'
                                     : 'ios-list';
                             }
-                            return <Ionicons name={iconName} size={18} color={color} />;
+                            return <Ionicons name={iconName} size={18.5} color={color} />;
                         }
                     })}
                 >

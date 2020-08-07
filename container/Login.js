@@ -14,6 +14,7 @@ export default class Login extends React.Component {
         password: '',
     };
 
+    // TODO: Finish the verify function
     // validateForm(input_string){
     //     const reg =  /^[a-z][0-9][A-Za-z0-9]{10}$/;
     //     let tag = input_string.length>0 && reg.test(input_string);
@@ -24,14 +25,13 @@ export default class Login extends React.Component {
     //     }
     // }
 
-    handleRoute = async (destination) =>{
-        await this.props.navigation.navigate(destination);
-    }
+    
 
     async handleSubmit(event){
         const {username,password} = this.state;
         try {
             const user = await Auth.signIn(username,password);
+            this.setState({username:'',password: ''})
             this.props.navigation.navigate('AuthLoad')
         }catch (e) {
             alert(e.message);

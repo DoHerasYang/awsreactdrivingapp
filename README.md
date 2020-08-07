@@ -48,7 +48,7 @@ $ sudo npm install
 
 11. Install Drawer `npm install @react-navigation/drawer`
 12. Install Tabs:   `npm install @react-navigation/material-top-tabs react-native-tab-view`
-13. Install 
+13. Install `LinearGradient`:    `expo install expo-linear-gradient`
 
 ---
 
