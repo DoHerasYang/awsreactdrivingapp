@@ -20,13 +20,22 @@ export default class HomeScreen extends React.Component {
         notification_value: false,
         weather_value: false,
         traffic_value: false,
-        report_value: "daily",
+        report_value: 'daily',
         textual_value: false,
         graphical_value: false,
     }
 
+    // Switch Function
     toggleSwitch = (tag,value) => {
         this.setState({[tag]: value})
+    }
+
+    // Radio Button
+    toggleButton(){
+        this.setState((preVState) => {
+            return{ report_value: !preVState.report_value }
+            }
+        )
     }
 
     render() {
@@ -35,7 +44,9 @@ export default class HomeScreen extends React.Component {
                 <View style={styles.interfaceStyle}>
                     <Text style={styles.textLogo}>Preference</Text>
                     <View style={styles.columnStyle}>
-                        <Text style={styles.textStyle}>Notification</Text>
+                        <View style={styles.textcolumnStyle}>
+                            <Text style={styles.textStyle}>Notification</Text>
+                        </View>
                         <Switch
                             style={styles.switchStyle}
                             trackColor={{ false: "#767577", true: "#81b0ff" }}
@@ -45,7 +56,9 @@ export default class HomeScreen extends React.Component {
                             value={this.state.notification_value}/>
                     </View>
                     <View style={styles.columnStyle}>
-                        <Text style={styles.textStyle}>Weather Alert</Text>
+                        <View style={styles.textcolumnStyle}>
+                            <Text style={styles.textStyle}>Weather Alert</Text>
+                        </View>
                         <Switch
                             style={styles.switchStyle}
                             trackColor={{ false: "#767577", true: "#81b0ff" }}
@@ -55,7 +68,9 @@ export default class HomeScreen extends React.Component {
                             value={this.state.weather_value}/>
                     </View>
                     <View style={styles.columnStyle}>
-                        <Text style={styles.textStyle}>Traffic Alert</Text>
+                        <View style={styles.textcolumnStyle}>
+                            <Text style={styles.textStyle}>Traffic Alert</Text>
+                        </View>
                         <Switch
                             style={styles.switchStyle}
                             trackColor={{ false: "#767577", true: "#81b0ff" }}
@@ -64,64 +79,57 @@ export default class HomeScreen extends React.Component {
                             value={this.state.traffic_value}
                             ios_backgroundColor="#3e3e3e"/>
                     </View>
-                    <View style={styles.columnStyle}>
+                    <View style={styles.sec_columnStyle}>
                         <Text style={styles.textSecondLogo}>Report Preference</Text>
                     </View>
-                    <View style={styles.columnStyle}>
-                        <Text style={styles.radioTextStyle}>Daily</Text>
-                        <View style={styles.borderStyle}>
-                            <RadioButton
-                                value="weekly"
-                                status={this.state.report_value==='weekly'? 'checked':"unchecked"}
-                                OnPress={(value)=>this.toggleSwitch("report_value",value)}
-                                color='#ff1a75'/>
-                        </View>
-                        {/*<RadioButton.Group*/}
-                        {/*    onValueChange={(value)=>this.toggleSwitch("report_value",value)}*/}
-                        {/*    value={this.state.report_value}*/}
-                        {/*    color='#ff1a75'*/}
-                        {/*    style={styles.radioStyle}>*/}
-                        {/*    <RadioButton.Item label="Daily" value="daily" status={this.state.report_value==='daily'? 'checked':"unchecked"} />*/}
-                        {/*    <RadioButton.Item label="Weekly" value="weekly" status={this.state.report_value==='daily'? 'checked':"unchecked"}/>*/}
-                        {/*</RadioButton.Group>*/}
-                        <Text style={styles.radioTextStyle}>Weekly</Text>
-                        <View style={styles.borderStyle}>
-                            <RadioButton
-                                value="daily"
-                                status={this.state.report_value==='daily'? 'checked':"unchecked"}
-                                OnPress={(value)=>this.toggleSwitch("report_value",value)}
-                                color='#ff1a75'/>
-                        </View>
+                    <View style={styles.multicolumnStyle}>
+                        {/*<Text style={styles.radioTextStyle}>Daily</Text>*/}
+                        {/*<View style={styles.borderStyle}>*/}
+                        {/*    <RadioButton*/}
+                        {/*        value="false"*/}
+                        {/*        status={this.state.report_value===false? 'checked':"unchecked"}*/}
+                        {/*        OnPress={() => this.toggleButton()}*/}
+                        {/*        color='#ff1a75'/>*/}
+                        {/*</View>*/}
+                        <RadioButton.Group
+                            onValueChange={(value)=>this.toggleSwitch("report_value",value)}
+                            value={this.state.report_value}
+                            color='#ff1a75'>
+                            <RadioButton.Item label="         Daily" value="daily" status={this.state.report_value==='daily'? 'checked':"unchecked"} />
+                            <RadioButton.Item label="         Weekly" value="weekly" status={this.state.report_value==='weekly'? 'checked':"unchecked"}/>
+                        </RadioButton.Group>
+                        {/*<Text style={styles.radioTextStyle}>Weekly</Text>*/}
+                        {/*<View style={styles.borderStyle}>*/}
+                        {/*    <RadioButton*/}
+                        {/*        value="weekly"*/}
+                        {/*        status = {this.state.report_value===true? 'checked':"unchecked"}*/}
+                        {/*        OnPress = {(value) => this.toggleSwitch("report_value",value)}*/}
+                        {/*        color='#ff1a75'/>*/}
+                        {/*</View>*/}
                     </View>
                     <View style={styles.columnStyle}>
-                        <View style={styles.borderStyle}>
-                            <RadioButton
-                                value="daily"
-                                status={this.state.report_value==='daily'? 'checked':"unchecked"}
-                                OnPress={(value)=>this.toggleSwitch("report_value",value)}
-                                color='#ff1a75'/>
+                        <View style={styles.textcolumnStyle}>
+                            <Text style={styles.radioTextStyle}>Textual Feedback Reports</Text>
                         </View>
-                        <Text style={styles.radioTextStyle}>Textual Feedback Reports</Text>
-                    </View>
-                    <View style={styles.columnStyle}>
                         <Switch
                             style={styles.switchStyle}
                             trackColor={{ false: "#767577", true: "#81b0ff" }}
                             thumbColor={"#f4f3f4"}
-                            onValueChange={(value) => this.toggleSwitch("traffic_value",value)}
-                            value={this.state.traffic_value}
+                            onValueChange={(value) => this.toggleSwitch("textual_value",value)}
+                            value={this.state.textual_value}
                             ios_backgroundColor="#3e3e3e"/>
-                        <Text style={styles.radioTextStyle}>Textual Feedback Reports</Text>
                     </View>
                     <View style={styles.columnStyle}>
+                        <View style={styles.textcolumnStyle}>
+                            <Text style={styles.radioTextStyle}>Graphical Feedback Reports</Text>
+                        </View>
                         <Switch
                             style={styles.switchStyle}
                             trackColor={{ false: "#767577", true: "#81b0ff" }}
                             thumbColor={"#f4f3f4"}
-                            onValueChange={(value) => this.toggleSwitch("traffic_value",value)}
-                            value={this.state.traffic_value}
+                            onValueChange={(value) => this.toggleSwitch("graphical_value",value)}
+                            value={this.state.graphical_value}
                             ios_backgroundColor="#3e3e3e"/>
-                        <Text style={styles.radioTextStyle}>Graphical Feedback Reports</Text>
                     </View>
                 </View>
             </View>
@@ -145,10 +153,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     textSecondLogo:{
-        marginTop: 10,
+        marginTop: 13,
         fontWeight: '500',
         color: '#000000',
-        textAlign: 'center',
         fontSize: 19,
     },
     interfaceStyle:{
@@ -160,22 +167,43 @@ const styles = StyleSheet.create({
         height: 38,
         marginBottom: 10,
         backgroundColor: '#ffe5b3',
+        width: 350,
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+    },
+    sec_columnStyle:{
+        height: 38,
+        marginBottom: 10,
+        backgroundColor: '#ffe5b3',
+        width: 350,
+        alignItems: 'center',
+    },
+    multicolumnStyle:{
+        height: 50,
+        flexDirection: 'row',
+        marginBottom: 10,
+        backgroundColor: '#ffe5b3',
+        width: 350,
+        justifyContent: 'center',
+    },
+    textcolumnStyle:{
+        width: 200,
     },
     textStyle: {
         alignItems: 'center',
         textAlign: 'center',
-        fontWeight: 'bold',
+        // fontWeight: 'bold',
         fontSize: 18,
         padding: 5,
         color: '#000000',
         width: 180,
     },
     switchStyle:{
-        alignItems: 'center',
-        marginLeft: 100,
+        marginLeft: 80,
     },
     radioTextStyle:{
         padding: 10,
+        fontSize: 14,
     },
     borderStyle:{
         width: 35,
