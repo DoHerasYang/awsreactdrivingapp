@@ -4,7 +4,7 @@ import { Auth } from 'aws-amplify';
 import Amplify from '@aws-amplify/core';
 import config from '../aws-exports';
 import { Button, FormGroup, FormControl } from "react-bootstrap";
-
+import AsyncStorage from '@react-native-community/async-storage';
 Amplify.configure(config)
 
 export default class Login extends React.Component {
@@ -25,12 +25,24 @@ export default class Login extends React.Component {
     //     }
     // }
 
-    
+    // Store the Local data for current user
+    async StoreData (username) {
+        try{
+            const preUser = AsyncStorage.getItem('CurrentUser')
+            if ( preUser !== username ){
+                AsyncStorage.clear();
+            }
+            await AsyncStorage.setItem('CurrentUser', value);
+        } catch(e){
+            console.log(e)
+        }
+    }
 
     async handleSubmit(event){
         const {username,password} = this.state;
         try {
             const user = await Auth.signIn(username,password);
+            await this.StoreData(this.state.username);
             this.setState({username:'',password: ''})
             this.props.navigation.navigate('AuthLoad')
         }catch (e) {

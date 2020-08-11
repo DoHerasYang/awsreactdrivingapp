@@ -1,22 +1,16 @@
 import React from 'react'
-import {
-    StyleSheet,
-    View,
-    Text,
-    Switch,
-    Button,
-} from 'react-native';
-import {
-    Container,
-    Item,
-    Input} from 'native-base';
-import { RadioButton } from 'react-native-paper';
+import {StyleSheet, Switch, Text, TouchableOpacity, View,} from 'react-native';
 
+import {RadioButton} from 'react-native-paper';
+import AsyncStorage from '@react-native-community/async-storage';
+import Amplify from '@aws-amplify/core';
+import config from '../../aws-exports';
+
+Amplify.configure(config)
 
 export default class HomeScreen extends React.Component {
 
     state = {
-        userId: '',
         notification_value: false,
         weather_value: false,
         traffic_value: false,
@@ -26,18 +20,47 @@ export default class HomeScreen extends React.Component {
     }
 
     // Switch Function
-    toggleSwitch = (tag,value) => {
-        this.setState({[tag]: value})
-    }
+    // toggleSwitch = (tag,value) => {
+    //     this.setState({[tag]: value});
+    // }
 
-    // Radio Button
-    toggleButton(){
-        this.setState((preVState) => {
-            return{ report_value: !preVState.report_value }
+      componentWillMount(){
+        // Import the User Preference
+        const keys =  AsyncStorage.getAllKeys();
+        let i = 0, len = keys.length;
+        for(; i<len; i++){
+            if(keys[i] !== "CurrentUser"){
+                this.setState({[keys[i]] :  AsyncStorage.getItem(keys[i])})
             }
-        )
+        }
     }
 
+    async toggleSwitch(tag,value){
+        this.setState({[tag]: value});
+        // local storage for each users Preference
+        const store_value = (typeof(value)==='boolean')? value.toString() : value
+        try{
+            if( AsyncStorage.getItem(tag) === null ){
+                alert("ss");
+                AsyncStorage.setItem(tag,store_value);
+            }
+            else{
+                alert("ssp");
+                AsyncStorage.removeItem(tag);
+                AsyncStorage.setItem(tag,store_value);
+            }
+        }catch (e) {
+            console.log(e);
+        }
+    }
+
+      async Log_out(){
+          // log out the current user
+          // await Auth.signOut();
+          this.props.navigation.navigate('Login');
+    }
+
+    // View
     render() {
         return (
             <View style={styles.container}>
@@ -131,6 +154,11 @@ export default class HomeScreen extends React.Component {
                             value={this.state.graphical_value}
                             ios_backgroundColor="#3e3e3e"/>
                     </View>
+                    <TouchableOpacity
+                        style={styles.logout_TouchStyle}
+                        onPress={this.Log_out}>
+                        <Text style={styles.logout_textStyle}>Sign Out</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         )
@@ -212,5 +240,18 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
         borderWidth: 0.3,
         borderRadius: 35,
+    },
+    logout_TouchStyle:{
+        width:"70%",
+        backgroundColor:"#fb5b5a",
+        borderRadius:25,
+        height:50,
+        alignItems:"center",
+        justifyContent:"center",
+        marginTop:30,
+    },
+    logout_textStyle:{
+        fontWeight: "500",
+        fontSize: 17,
     },
 })

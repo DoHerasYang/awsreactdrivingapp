@@ -6,6 +6,7 @@ import {
     Alert,
     Platform,
 } from 'react-native';
+
 import { Auth } from 'aws-amplify';
 import Amplify from '@aws-amplify/core';
 import config from '../../aws-exports';

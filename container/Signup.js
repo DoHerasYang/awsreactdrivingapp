@@ -85,7 +85,7 @@ export default class Signup extends React.Component {
         const { username, authCode } = this.state
         await Auth.confirmSignUp(username, authCode)
             .then(() => {
-                this.props.navigation.navigate('Initial')
+                this.props.navigation.navigate('Login')
                 console.log('Successfully Confirm the AWS Auth Signup Function')
             })
             .catch(error =>{
