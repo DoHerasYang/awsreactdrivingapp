@@ -1,0 +1,3 @@
+class GEO_Function {
+
+}

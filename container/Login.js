@@ -28,13 +28,16 @@ export default class Login extends React.Component {
     // Store the Local data for current user
     async StoreData (username) {
         try{
-            const preUser = AsyncStorage.getItem('CurrentUser')
+            const preUser = await AsyncStorage.getItem('CurrentUser');
             if ( preUser !== username ){
-                AsyncStorage.clear();
+                await AsyncStorage.clear();
+                await AsyncStorage.setItem('CurrentUser', username);
+                await AsyncStorage.setItem('default', '1');
             }
-            await AsyncStorage.setItem('CurrentUser', value);
+            // await AsyncStorage.removeItem('default');
+            // await AsyncStorage.setItem('default', '0');
         } catch(e){
-            console.log(e)
+            console.log(e);
         }
     }
 
@@ -44,7 +47,7 @@ export default class Login extends React.Component {
             const user = await Auth.signIn(username,password);
             await this.StoreData(this.state.username);
             this.setState({username:'',password: ''})
-            this.props.navigation.navigate('AuthLoad')
+            this.props.navigation.navigate('UserTabs')
         }catch (e) {
             alert(e.message);
         }

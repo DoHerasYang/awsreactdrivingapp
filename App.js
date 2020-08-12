@@ -145,7 +145,11 @@ const Stack = createStackNavigator()
 function MyAppStack(){
     return (
         <Stack.Navigator>
-            <Stack.Screen name="Login" component={Login} options={{ title: 'My home',headerShown: false, }}/>
+            <Stack.Screen
+                name="Login"
+                component={Login}
+                options={{ title: 'My home',headerShown: false, }}
+            />
             <Stack.Screen
                 name='ForgetPassword'
                 component={ForgetPassword}
