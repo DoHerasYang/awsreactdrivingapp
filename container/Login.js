@@ -34,6 +34,7 @@ export default class Login extends React.Component {
                 await AsyncStorage.setItem('CurrentUser', username);
                 await AsyncStorage.setItem('default', '1');
             }
+            // await AsyncStorage.setItem('default', '0');
             // await AsyncStorage.removeItem('default');
             // await AsyncStorage.setItem('default', '0');
         } catch(e){

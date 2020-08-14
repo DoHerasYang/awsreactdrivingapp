@@ -18,6 +18,7 @@ import AuthLoadScreen from "./container/AuthLoad";
 import MainPage from "./container/MainPage";
 import UserScreen from "./container/user/UserScreen";
 import SettingPage from "./container/user/SettingScreen";
+import GEO_Function from "./container/function/GEO_Function";
 
 
 // import the icons
@@ -144,7 +145,8 @@ const Stack = createStackNavigator()
 
 function MyAppStack(){
     return (
-        <Stack.Navigator>
+        <Stack.Navigator
+            initialRouteName="Login">
             <Stack.Screen
                 name="Login"
                 component={Login}
@@ -204,6 +206,22 @@ function MyAppStack(){
                 options={{
                     title:'',
                     headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name='GEO'
+                component={GEO_Function}
+                options={{
+                    title:'',
+                    headerStyle:{
+                        backgroundColor: '#290066',
+                        shadowColor: 'transparent',
+                        shadowRadius: 0,
+                        shadowOffset: {
+                            height: 0,
+                        }
+                    },
+                    headerTintColor: 'white',
                 }}
             />
         </Stack.Navigator>

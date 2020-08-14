@@ -49,6 +49,10 @@ $ sudo npm install
 11. Install Drawer `npm install @react-navigation/drawer`
 12. Install Tabs:   `npm install @react-navigation/material-top-tabs react-native-tab-view`
 13. Install `LinearGradient`:    `expo install expo-linear-gradient`
+14. Install `AsyncStorage` : `expo install @react-native-community/async-storage`
+15. Install  `MapView` : `expo install react-native-maps`
+16. Install `Constant` : `expo install expo-constants`
+17. Install `Permissions`: `expo install expo-permissions`
 
 ---
 

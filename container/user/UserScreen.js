@@ -5,6 +5,7 @@ import {
     Text,
     Alert,
     Platform,
+    TouchableOpacity,
 } from 'react-native';
 
 import { Auth } from 'aws-amplify';
@@ -53,7 +54,7 @@ export default class UserScreen extends React.Component{
         });
     }
 
-    componentWillMount (){
+    componentWillMount(){
         AsyncStorage.getItem('default',(error,result)=>{
             if(result === 1){
                 Alert.alert(
@@ -77,10 +78,22 @@ export default class UserScreen extends React.Component{
         })
     }
 
+    GEO_Navigation(){
+        this.props.navigation.navigate(
+            'GEO',
+            {
+                screen: 'GEO_Function',
+            });
+    }
+
     render() {
         return(
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Sweet Home!</Text>
+            <View style={styles.container}>
+                <TouchableOpacity
+                    style={styles.buttonStyle}
+                    onPress={()=>this.GEO_Navigation()}>
+                    <Text>Start Navigation</Text>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -89,5 +102,17 @@ export default class UserScreen extends React.Component{
 const styles = StyleSheet.create({
     container:{
         flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    buttonStyle:{
+        alignItems: 'center',
+        padding: 10,
+        backgroundColor: "#DDDDDD",
+    },
+    textStyle:{
+        fontSize: 10,
+        fontWeight: '500',
+        color: '#000000',
     },
 })
