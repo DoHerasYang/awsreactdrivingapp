@@ -13,12 +13,16 @@ import {
 import MapView,{ Marker, MapViewAnimated} from 'react-native-maps';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
+import { FontAwesome } from '@expo/vector-icons';
+
 
 export default class GEO_Function extends React.Component{
 
     // Configure the default state
     state = {
         initialMap: null,
+        mapRegion: null,
+        logLocation: null,
         location:{
             coords:{
                 latitude: 0,
@@ -27,9 +31,64 @@ export default class GEO_Function extends React.Component{
         },
     };
 
-
     componentDidMount() {
         this._getLocationAsync();
+    }
+
+    // Zoom Button Function
+    _zoomInDelta(){
+        let lat_Delta = this.state.mapRegion.latitudeDelta;
+        let lon_Delta = this.state.mapRegion.longitudeDelta;
+        let cur_lat = this.state.mapRegion.latitude;
+        let cur_lon = this.state.mapRegion.longitude;
+
+        if(lat_Delta > 0.001 && lat_Delta<0.1){
+            this.setState({
+                mapRegion:{
+                    latitude: cur_lat,
+                    longitude: cur_lon,
+                    latitudeDelta: (lat_Delta-0.005),
+                    longitudeDelta: (lon_Delta-0.005),
+                }
+            })
+        }else if (lat_Delta > 0.1){
+            this.setState({
+                mapRegion:{
+                    latitude: cur_lat,
+                    longitude: cur_lon,
+                    latitudeDelta: (lat_Delta-0.05),
+                    longitudeDelta: (lon_Delta-0.05),
+                }
+            })
+        }
+    }
+
+    _zoomOutDelta(){
+        let lat_Delta = this.state.mapRegion.latitudeDelta;
+        let lon_Delta = this.state.mapRegion.longitudeDelta;
+        let cur_lat = this.state.mapRegion.latitude;
+        let cur_lon = this.state.mapRegion.longitude;
+
+        if(lat_Delta > 0.001 && lat_Delta<0.1){
+            this.setState({
+                mapRegion:{
+                    latitude: cur_lat,
+                    longitude: cur_lon,
+                    latitudeDelta: (lat_Delta+0.005),
+                    longitudeDelta: (lon_Delta+0.005),
+                }
+            })
+        }else if (lat_Delta > 0.1){
+            this.setState({
+                mapRegion:{
+                    latitude: cur_lat,
+                    longitude: cur_lon,
+                    latitudeDelta: (lat_Delta+0.05),
+                    longitudeDelta: (lon_Delta+0.05),
+                }
+            })
+        }
+
     }
 
     _handleMapRegionChange = (mapRegion) => {
@@ -57,10 +116,22 @@ export default class GEO_Function extends React.Component{
                     location,
                 });
         }
-        let initialMap = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
+        // Initial Map Region
+        let initialMap = await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.Highest});
         this.setState({
             initialMap,
         });
+
+        // Initial Marker Initial position
+        // let location = {
+        //     coords:{
+        //         latitude: initialMap.coords.latitude,
+        //         longitude: initialMap.coords.longitude,
+        //     }
+        // }
+        // this.setState({
+        //     location,
+        // })
     }
 
     render(){
@@ -69,19 +140,21 @@ export default class GEO_Function extends React.Component{
             let current_longitude = this.state.initialMap.coords.longitude;
             return(
                 <View style={styles.container}>
-                    <View style={styles.container}>
+                    <View style={styles.mainContainer}>
                         <MapView
                             style={styles.mapStyle}
+                            provider="google"
                             initialRegion={{
-                                // latitude: 34.56602,
-                                // longitude: 110.09207,
                                 latitude: current_latitude,
                                 longitude: current_longitude,
-                                latitudeDelta: 10,
-                                longitudeDelta: 10,
+                                latitudeDelta: 0.00423,
+                                longitudeDelta: 0.00423,
                             }}
                             onPress={this._handleLocationUpdate}
-                            onRegionChangeComplete={this._handleMapRegionChange}>
+                            onRegionChangeComplete={this._handleMapRegionChange}
+                            followsUserLocation={true}
+                            showsUserLocation={true}
+                            region={this.state.mapRegion}>
                             <Marker
                                 coordinate={this.state.location.coords}
                                 draggable
@@ -89,10 +162,21 @@ export default class GEO_Function extends React.Component{
                         </MapView>
                         <View style={styles.overContainer}>
                             <TouchableOpacity
-                                activeOpacity={0.1}>
+                                style={styles.buttonStyle}>
                                 <Text>Start Tracking</Text>
                             </TouchableOpacity>
                         </View>
+                    </View>
+                    <View
+                        style={styles.sideContainer}>
+                        <TouchableOpacity
+                            onPress={()=>this._zoomInDelta()}>
+                            <FontAwesome name="plus-square" size={30} color="black" style={{marginBottom:25}} />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={()=>this._zoomOutDelta()}>
+                            <FontAwesome name="minus-square" size={30} color="black" />
+                        </TouchableOpacity>
                     </View>
                 </View>
             )
@@ -100,7 +184,7 @@ export default class GEO_Function extends React.Component{
             // if we haven't loaded show a waiting placeholder
             return (
                 <View style={styles.container}>
-                    <Text>Waiting...</Text>
+                    <Text>Loading...</Text>
                 </View>
             )
         }
@@ -111,25 +195,39 @@ export default class GEO_Function extends React.Component{
 const styles = StyleSheet.create({
     container:{
         flex: 1,
+    },
+    mainContainer:{
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
     },
     overContainer:{
         position:'absolute',
         top: '80%',
-        width:"40%",
-        backgroundColor: "rgba(255,255,255,0.7)",
-        borderRadius: 25,
-        borderColor: '#000000',
-        borderWidth: 1,
-        height:40,
         alignItems:"center",
         justifyContent:"center",
-        padding: 2,
+    },
+    sideContainer:{
+        position:'absolute',
+        top: '60%',
+        right: 20,
+        alignItems:"center",
+        justifyContent:"space-between",
+        marginVertical: 30,
     },
     mapStyle:{
         alignSelf: 'stretch',
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
+    },
+    buttonStyle:{
+        width: 130,
+        backgroundColor: "rgba(255,255,255,0.7)",
+        borderRadius: 25,
+        borderColor: '#000000',
+        borderWidth: 0.9,
+        height: 40,
+        alignItems:"center",
+        justifyContent:"center",
     },
 })

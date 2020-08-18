@@ -1,10 +1,21 @@
 import React,{ useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    TextInput,
+    TouchableOpacity,
+    Keyboard,
+    TouchableHighlight,
+    Alert,
+    ActivityIndicator} from 'react-native';
 import { Auth } from 'aws-amplify';
 import Amplify from '@aws-amplify/core';
 import config from '../aws-exports';
-import { Button, FormGroup, FormControl } from "react-bootstrap";
+import { BlurView } from 'expo-blur';
 import AsyncStorage from '@react-native-community/async-storage';
+
+
 Amplify.configure(config)
 
 export default class Login extends React.Component {
@@ -12,6 +23,10 @@ export default class Login extends React.Component {
     state = {
         username: '',
         password: '',
+        auth_label: false,
+        app_load: false,
+        indicator_label: false,
+        intensity_value: 0,
     };
 
     // TODO: Finish the verify function
@@ -44,22 +59,40 @@ export default class Login extends React.Component {
 
     async handleSubmit(event){
         const {username,password} = this.state;
+        this.setState({
+            intensity_value: 80,
+            indicator_label: true,
+        })
         try {
-            const user = await Auth.signIn(username,password);
             await this.StoreData(this.state.username);
-            this.setState({username:'',password: ''})
-            this.props.navigation.navigate('UserTabs')
+            await Auth.signIn(username,password)
+                .then((user)=>{
+                    this.props.navigation.navigate('AuthLoad')
+                    this.setState({
+                        intensity_value: 0,
+                        indicator_label: false,
+                    })
+                    this.setState({
+                        password: '',
+                    })
+                })
         }catch (e) {
+            this.setState({
+                intensity_value: 0,
+                username: '',
+                password: '',
+                indicator_label: false,
+            });
             alert(e.message);
         }
     }
 
-    render(){
-        const { navigate } = this.props.navigation;
+    render() {
+        const {navigate} = this.props.navigation;
         return (
             <View style={styles.container}>
                 <Text style={styles.logo}>Sticker</Text>
-                <View style={styles.inputView} >
+                <View style={styles.inputView}>
                     <TextInput
                         value={this.state.username}
                         style={styles.inputText}
@@ -70,7 +103,7 @@ export default class Login extends React.Component {
                         autoCorrect={false}
                         onChangeText={(username) => this.setState({username})}/>
                 </View>
-                <View style={styles.inputView} >
+                <View style={styles.inputView}>
                     <TextInput
                         value={this.state.password}
                         secureTextEntry={true}
@@ -83,21 +116,29 @@ export default class Login extends React.Component {
                         onChangeText={(password) => this.setState({password})}/>
                 </View>
                 <TouchableOpacity
-                    onPress={()=> navigate('ForgetPassword')}>
+                    onPress={() => navigate('ForgetPassword')}>
                     <Text style={styles.forgot}>Forgot Password?</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={styles.loginBtn}
+                    style={[!this.state.auth_label&&styles.loginBtn,
+                        this.state.auth_label&&styles.disable_Btn]}
                     onPress={this.handleSubmit.bind(this)}
-                    activeOpacity = {0.3}>
+                    activeOpacity={0.3}
+                    disabled={this.state.auth_label}>
                     <Text style={styles.loginText}>LOG IN</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={()=> navigate('Signup')}>
+                    onPress={() => navigate('Signup')}>
                     <Text style={styles.loginText}>Sign up</Text>
                 </TouchableOpacity>
+                <BlurView
+                    intensity={this.state.intensity_value}
+                    tint={"dark"}
+                    style={[this.state.indicator_label&&StyleSheet.absoluteFill,styles.nonBlurredContent]}>
+                    <ActivityIndicator animating={this.state.indicator_label}/>
+                </BlurView>
             </View>
-        );
+        )
     }
 }
 
@@ -142,7 +183,22 @@ const styles = StyleSheet.create({
         marginTop:30,
         marginBottom:10
     },
+    disable_Btn:{
+        backgroundColor: "#c49191",
+        width:"80%",
+        borderRadius:25,
+        height:50,
+        alignItems:"center",
+        justifyContent:"center",
+        marginTop:30,
+        marginBottom:10
+    },
     loginText:{
         color:"white"
-    }
+    },
+    nonBlurredContent: {
+        position: "absolute",
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 });
