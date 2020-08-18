@@ -72,6 +72,13 @@ export default class UserScreen extends React.Component{
         })
     }
 
+    obtain_temp = async() =>{
+        let current_temperature = await obtain_WeatherJson();
+        this.setState({
+            temperature : current_temperature["main"].temp,
+            city_name: current_temperature["name"]
+        })
+    }
 
     componentWillMount(){
         this.obtain_temp();
