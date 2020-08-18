@@ -34,7 +34,6 @@ export default class HomeScreen extends React.Component {
         this.Initialize_Keys();
     }
 
-
     Initialize_Keys = async () =>{
         AsyncStorage.getAllKeys((err,keys)=>{
             AsyncStorage.multiGet(keys,(error,stores)=>{
@@ -203,7 +202,8 @@ const styles = StyleSheet.create({
         fontSize: 30,
         padding: 6,
         color: '#000000',
-        marginBottom: 40,
+        marginTop: 15,
+        marginBottom: 10,
         textAlign: 'center',
     },
     textSecondLogo:{
@@ -239,6 +239,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffe5b3',
         width: 350,
         justifyContent: 'center',
+        borderWidth: 0.5,
     },
     textcolumnStyle:{
         width: 200,
@@ -271,10 +272,10 @@ const styles = StyleSheet.create({
         width:"70%",
         backgroundColor:"#fb5b5a",
         borderRadius:25,
-        height:50,
+        height:48,
         alignItems:"center",
         justifyContent:"center",
-        marginTop:30,
+        marginTop:20,
     },
     logout_textStyle:{
         fontWeight: "500",
