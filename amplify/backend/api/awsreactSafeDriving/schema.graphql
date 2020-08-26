@@ -1,0 +1,27 @@
+type userinfo @model{
+  id: ID!
+  account: String
+  title: String
+  firstname: String
+  lastname: String
+  agegroup: String
+  ethnicity: String
+  postcode: String
+  date_of_birth: String
+  email: String
+  driving_period: String
+  commuting_behavior: String
+}
+
+type usergeoinfo @model{
+  firstname: String
+  lastname: String
+  geoinfo: [geoinfo]
+}
+
+type geoinfo @model{
+  date: String
+  lat: Float
+  lon: Float
+  speed: Float
+}

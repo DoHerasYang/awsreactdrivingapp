@@ -8,7 +8,7 @@
 		}
 	},
 	"api": {
-		"awsreactdrivingapp": {
+		"awsreactSafeDriving": {
 			"service": "AppSync",
 			"providerPlugin": "awscloudformation",
 			"output": {

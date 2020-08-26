@@ -10,8 +10,13 @@ import {
     TouchableOpacity,
 } from 'react-native';
 
-import MapView,{ Marker, MapViewAnimated} from 'react-native-maps';
-import * as Permissions from 'expo-permissions';
+import MapView, {
+    Marker,
+    MapViewAnimated,
+    AnimatedRegion,
+    Polyline,
+    PROVIDER_GOOGLE} from 'react-native-maps';
+
 import * as Location from 'expo-location';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -29,6 +34,9 @@ export default class GEO_Function extends React.Component{
                 longitude: 0,
             }
         },
+        routeCoordinates:[],
+        distanceTraveled: 0,
+        preLocation:{},
     };
 
     componentDidMount() {
@@ -132,6 +140,7 @@ export default class GEO_Function extends React.Component{
         // this.setState({
         //     location,
         // })
+
     }
 
     render(){

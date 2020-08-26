@@ -18,6 +18,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 Amplify.configure(config)
 
+export let current_username = null;
+
 export default class Login extends React.Component {
 
     state = {
@@ -58,9 +60,10 @@ export default class Login extends React.Component {
     }
 
     async handleSubmit(event){
+        current_username = this.state.username;
         const {username,password} = this.state;
         this.setState({
-            intensity_value: 80,
+            intensity_value: 78,
             indicator_label: true,
         })
         try {
@@ -135,7 +138,8 @@ export default class Login extends React.Component {
                     intensity={this.state.intensity_value}
                     tint={"dark"}
                     style={[this.state.indicator_label&&StyleSheet.absoluteFill,styles.nonBlurredContent]}>
-                    <ActivityIndicator animating={this.state.indicator_label}/>
+                    <Text style={[styles.hide_loadingStyle,this.state.indicator_label&&styles.loading_textStyle]}>Loading...</Text>
+                    <ActivityIndicator animating={this.state.indicator_label} size="large"/>
                 </BlurView>
             </View>
         )
@@ -200,5 +204,14 @@ const styles = StyleSheet.create({
         position: "absolute",
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    hide_loadingStyle:{
+        color: "transparent",
+    },
+    loading_textStyle:{
+        fontSize: 25,
+        marginBottom: 10,
+        color: "#ffffff",
+        fontWeight: "400",
     },
 });

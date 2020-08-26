@@ -10,6 +10,7 @@ import { NavigationContainer } from '@react-navigation/native';
 // import the Pages containers
 import Login from "./container/Login";
 import Signup from './container/Signup';
+import UserInfo from "./container/user/UserInfo";
 import ForgetPassword from './container/ForgetPasswordScreen';
 import AuthLoadScreen from "./container/AuthLoad";
 
@@ -198,6 +199,13 @@ function MyAppStack(){
                         }
                     },
                     headerTintColor: 'white',
+                }}
+            />
+            <Stack.Screen
+                name='UserInfo'
+                component={UserInfo}
+                options={{
+                    headerShown: false,
                 }}
             />
             <Stack.Screen
