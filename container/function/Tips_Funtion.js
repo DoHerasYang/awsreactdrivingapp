@@ -36,18 +36,18 @@ function column_iconItem(sid){
     let icon_label = tips[sid][1];
 
     if (icon_label === 1){
-        icon_stack.push(<FontAwesome5 name="smile" style={{marginRight:3}} size={32} color="black" />);
+        icon_stack.push(<FontAwesome5 key={sid} name="smile" style={{marginRight:3}} size={32} color="black" />);
     }else if(icon_label===2){
-        icon_stack.push(<FontAwesome5 name="smile-beam" style={{marginRight:3}} size={32} color="black" />);
+        icon_stack.push(<FontAwesome5 key={sid} name="smile-beam" style={{marginRight:3}} size={32} color="black" />);
     }else{
-        icon_stack.push(<Entypo name="emoji-sad" style={{marginRight:3}} size={32} color="black" />);
+        icon_stack.push(<Entypo key={sid} name="emoji-sad" style={{marginRight:3}} size={32} color="black" />);
     }
     return icon_stack
 }
 
 function column_TextItem(sid) {
     return(
-        <Text style={styles.text_Style}>{tips[sid][0]}</Text>
+        <Text key={sid} style={styles.text_Style}>{tips[sid][0]}</Text>
     )
 }
 

@@ -28,9 +28,3 @@ export async function obtain_WeatherJson(){
     let response = await fetch(api);
     return await response.json()
 }
-
-
-export async function obtain_Weather(){
-    let result = await obtain_API();
-    return result["main"].temp
-}

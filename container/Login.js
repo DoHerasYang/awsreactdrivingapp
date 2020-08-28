@@ -9,11 +9,13 @@ import {
     TouchableHighlight,
     Alert,
     ActivityIndicator} from 'react-native';
+
 import { Auth } from 'aws-amplify';
 import Amplify from '@aws-amplify/core';
 import config from '../aws-exports';
 import { BlurView } from 'expo-blur';
 import AsyncStorage from '@react-native-community/async-storage';
+import {AppStatus} from "./Welcome";
 
 
 Amplify.configure(config)
@@ -50,6 +52,7 @@ export default class Login extends React.Component {
                 await AsyncStorage.clear();
                 await AsyncStorage.setItem('CurrentUser', username);
                 await AsyncStorage.setItem('default', '1');
+                await AsyncStorage.getItem('AppStatus',"false");
             }
             // await AsyncStorage.setItem('default', '0');
             // await AsyncStorage.removeItem('default');
@@ -94,7 +97,7 @@ export default class Login extends React.Component {
         const {navigate} = this.props.navigation;
         return (
             <View style={styles.container}>
-                <Text style={styles.logo}>Sticker</Text>
+                <Text style={styles.logo}>DrivingBeacon</Text>
                 <View style={styles.inputView}>
                     <TextInput
                         value={this.state.username}
@@ -156,7 +159,7 @@ const styles = StyleSheet.create({
     },
     logo:{
         fontWeight:"bold",
-        fontSize:50,
+        fontSize: 37,
         color:"#fb5b5a",
         marginBottom:40
     },
@@ -175,7 +178,8 @@ const styles = StyleSheet.create({
     },
     forgot:{
         color:"white",
-        fontSize:11
+        fontWeight: "400",
+        fontSize: 13,
     },
     loginBtn:{
         width:"80%",
@@ -184,7 +188,7 @@ const styles = StyleSheet.create({
         height:50,
         alignItems:"center",
         justifyContent:"center",
-        marginTop:30,
+        marginTop:27,
         marginBottom:10
     },
     disable_Btn:{
@@ -198,7 +202,9 @@ const styles = StyleSheet.create({
         marginBottom:10
     },
     loginText:{
-        color:"white"
+        color:"white",
+        fontWeight: "400",
+        fontSize: 13,
     },
     nonBlurredContent: {
         position: "absolute",

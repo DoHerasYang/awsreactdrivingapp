@@ -11,7 +11,6 @@ import {
     ActivityIndicator,
 } from 'react-native';
 
-import {obtain_Weather} from "../function/Weather_Info";
 import {obtain_WeatherJson} from "../function/Weather_Info";
 import {obtain_tips} from "../function/Tips_Funtion";
 import {Query_UserName} from "../function/User_GraphQL";

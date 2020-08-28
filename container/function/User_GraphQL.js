@@ -3,7 +3,7 @@ import API, { graphqlOperation } from '@aws-amplify/api'
 import awsconfig from '../../aws-exports';
 Amplify.configure(awsconfig);
 
-// Create the mutation function
+// Query the remote database
 const listName = `
   query {
     listUserinfos{
@@ -16,6 +16,9 @@ const listName = `
     }
  }
 `
+// Mutation the New data to remote server
+
+
 
 export async function Query_UserName(cur_account){
     try {
@@ -24,4 +27,8 @@ export async function Query_UserName(cur_account){
     }catch (e) {
         console.log(e);
     }
+}
+
+export async function Mutation_GEO() {
+
 }

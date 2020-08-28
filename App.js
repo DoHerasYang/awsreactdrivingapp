@@ -6,8 +6,10 @@ import { createSwitchNavigator, createAppContainer} from "react-navigation";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from '@react-navigation/native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 // import the Pages containers
+import WelcomePages from "./container/Welcome";
 import Login from "./container/Login";
 import Signup from './container/Signup';
 import UserInfo from "./container/user/UserInfo";
@@ -142,12 +144,17 @@ function UserTabs(){
 }
 
 
-const Stack = createStackNavigator()
+const Stack = createStackNavigator();
 
 function MyAppStack(){
     return (
         <Stack.Navigator
-            initialRouteName="Login">
+            initialRouteName={"WelcomePages"}>
+            <Stack.Screen
+                name="WelcomePages"
+                component={WelcomePages}
+                options={{ headerShown: false, }}
+            />
             <Stack.Screen
                 name="Login"
                 component={Login}
@@ -189,6 +196,7 @@ function MyAppStack(){
                 name='AuthLoad'
                 component={AuthLoadScreen}
                 options={{
+                    headerShown: false,
                     title:'',
                     headerStyle:{
                         backgroundColor: '#290066',
@@ -236,8 +244,123 @@ function MyAppStack(){
     );
 }
 
-export default function App() {
+function MyAppStack_Sec(){
     return (
+        <Stack.Navigator
+            initialRouteName={"Login"}>
+            <Stack.Screen
+                name="Login"
+                component={Login}
+                options={{ title: 'My home',headerShown: false, }}
+            />
+            <Stack.Screen
+                name='ForgetPassword'
+                component={ForgetPassword}
+                options={{
+                    title:'',
+                    headerStyle:{
+                        backgroundColor: '#290066',
+                        shadowColor: 'transparent',
+                        shadowRadius: 0,
+                        shadowOffset: {
+                            height: 0,
+                        }
+                    },
+                    headerTintColor: 'white',
+                }}
+            />
+            <Stack.Screen
+                name='Signup'
+                component={Signup}
+                options={{
+                    title:'',
+                    headerStyle:{
+                        backgroundColor: '#290066',
+                        shadowColor: 'transparent',
+                        shadowRadius: 0,
+                        shadowOffset: {
+                            height: 0,
+                        }
+                    },
+                    headerTintColor: 'white',
+                }}
+            />
+            <Stack.Screen
+                name='AuthLoad'
+                component={AuthLoadScreen}
+                options={{
+                    headerShown: false,
+                    title:'',
+                    headerStyle:{
+                        backgroundColor: '#290066',
+                        shadowColor: 'transparent',
+                        shadowRadius: 0,
+                        shadowOffset: {
+                            height: 0,
+                        }
+                    },
+                    headerTintColor: 'white',
+                }}
+            />
+            <Stack.Screen
+                name='UserInfo'
+                component={UserInfo}
+                options={{
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name='UserTabs'
+                component={UserTabs}
+                options={{
+                    title:'',
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name='GEO'
+                component={GEO_Function}
+                options={{
+                    title:'',
+                    headerStyle:{
+                        backgroundColor: '#290066',
+                        shadowColor: 'transparent',
+                        shadowRadius: 0,
+                        shadowOffset: {
+                            height: 0,
+                        }
+                    },
+                    headerTintColor: 'white',
+                }}
+            />
+        </Stack.Navigator>
+    );
+}
+
+
+export default function App() {
+    const [AppStatus, setAppStatus] = React.useState({check_status: null});
+    React.useEffect(()=>{
+        let status;
+        async function Obtain_AppStatus(){
+            try{
+                status = await AsyncStorage.getItem('AppStatus')
+            }catch (e) {
+               console.log(e);
+            }
+            setAppStatus({check_status:status})
+        }
+        Obtain_AppStatus();
+    })
+
+    if (AppStatus.check_status === "false"){
+        return (
+            <NavigationContainer>
+                <MyAppStack_Sec/>
+            </NavigationContainer>
+        );
+    }
+    return(
         <NavigationContainer>
             <MyAppStack/>
         </NavigationContainer>

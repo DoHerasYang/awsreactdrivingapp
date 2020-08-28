@@ -115,9 +115,7 @@ $ sudo npm install
 
   `expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view`
 
-+ 
-
-
++ If you have problem in `npm` installation tool after you have installed a new component, please remove all the modules: `rm -rf node_modules` and then `yarn install`.
 
 
 

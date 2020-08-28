@@ -42,7 +42,7 @@ export default class UserInfo extends Component{
         this.setState({screenHeight: contentHeight})
     }
 
-    Obtain_CurrentData(){
+    Obtain_CurrentDate(){
         let date = new Date();
         let year = date.getFullYear();
         let month = (date.getMonth()+1);
@@ -69,7 +69,6 @@ export default class UserInfo extends Component{
             firstname: this.state.firstname,
             lastname: this.state.lastname,
             agegroup: this.state.agegroup,
-            ethnicity: this.state.ethnicity,
             postcode: this.state.postcode,
             date_of_birth: this.state.date_of_birth,
             email: this.state.email,
@@ -192,7 +191,7 @@ export default class UserInfo extends Component{
                                             <Form style={{marginTop:10}}>
                                                 <DatePicker
                                                     defaultDate={new Date(2018, 4, 4)}
-                                                    maximumDate={this.Obtain_CurrentData()}
+                                                    maximumDate={this.Obtain_CurrentDate()}
                                                     locale={"en"}
                                                     placeHolderText="Select BirthDay"
                                                     modalTransparent={false}
