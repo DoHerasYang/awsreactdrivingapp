@@ -14,8 +14,7 @@ import MapView, {
     Marker,
     MapViewAnimated,
     AnimatedRegion,
-    Polyline,
-    PROVIDER_GOOGLE} from 'react-native-maps';
+    Polyline,} from 'react-native-maps';
 
 import * as Location from 'expo-location';
 import { getDistance } from 'geolib';
@@ -54,7 +53,7 @@ export default class GEO_Function extends React.Component{
 
     componentDidMount() {
         this._getLocationAsync();
-        this._watchPosition();
+        // this._watchPosition();
     }
 
     componentWillUnmount() {
@@ -249,6 +248,8 @@ export default class GEO_Function extends React.Component{
     // Interface
     // Initialize when user enter in this interface
     Initial_Map(){
+        let latitude = this.state.initialMap.coords.latitude;
+        let longitude = this.state.initialMap.coords.longitude;
         return(
             <View style={styles.container}>
                 <View style={styles.mainContainer}>
@@ -256,13 +257,13 @@ export default class GEO_Function extends React.Component{
                         style={styles.mapStyle}
                         provider="google"
                         initialRegion={{
-                            latitude: this.state.initialMap.coords.latitude,
-                            longitude: this.state.initialMap.coords.longitude,
+                            latitude: latitude,
+                            longitude: longitude,
                             latitudeDelta: 0.00423,
                             longitudeDelta: 0.00423,
                         }}
                         onPress={this._handleLocationUpdate}
-                        onRegionChangeComplete={this._handleMapRegionChange}
+                        // onRegionChangeComplete={this._handleMapRegionChange}
                         followsUserLocation={true}
                         showsUserLocation={true}
                         region={this.state.mapRegion}>

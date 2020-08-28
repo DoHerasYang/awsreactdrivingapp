@@ -136,7 +136,7 @@ export default class UserScreen extends React.Component{
                     <View style={styles.header_Style}>
                         <Text style={styles.header_textStyle}>WELCOME</Text>
                         <Text style={styles.username_Style}>{this.state.user_name}</Text>
-                        <Text style={styles.username_Style}>     {this.state.temperature}°C    {this.state.city_name}</Text>
+                        <Text style={styles.username_Style}>{this.state.temperature}°C    {this.state.city_name}</Text>
                     </View>
                     <TouchableOpacity
                         style={styles.report_buttonStyle}>

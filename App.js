@@ -146,10 +146,10 @@ function UserTabs(){
 
 const Stack = createStackNavigator();
 
-function MyAppStack(){
+function MyAppStack(initial_Route){
     return (
         <Stack.Navigator
-            initialRouteName={"WelcomePages"}>
+            initialRouteName={initial_Route}>
             <Stack.Screen
                 name="WelcomePages"
                 component={WelcomePages}
@@ -244,100 +244,6 @@ function MyAppStack(){
     );
 }
 
-function MyAppStack_Sec(){
-    return (
-        <Stack.Navigator
-            initialRouteName={"Login"}>
-            <Stack.Screen
-                name="Login"
-                component={Login}
-                options={{ title: 'My home',headerShown: false, }}
-            />
-            <Stack.Screen
-                name='ForgetPassword'
-                component={ForgetPassword}
-                options={{
-                    title:'',
-                    headerStyle:{
-                        backgroundColor: '#290066',
-                        shadowColor: 'transparent',
-                        shadowRadius: 0,
-                        shadowOffset: {
-                            height: 0,
-                        }
-                    },
-                    headerTintColor: 'white',
-                }}
-            />
-            <Stack.Screen
-                name='Signup'
-                component={Signup}
-                options={{
-                    title:'',
-                    headerStyle:{
-                        backgroundColor: '#290066',
-                        shadowColor: 'transparent',
-                        shadowRadius: 0,
-                        shadowOffset: {
-                            height: 0,
-                        }
-                    },
-                    headerTintColor: 'white',
-                }}
-            />
-            <Stack.Screen
-                name='AuthLoad'
-                component={AuthLoadScreen}
-                options={{
-                    headerShown: false,
-                    title:'',
-                    headerStyle:{
-                        backgroundColor: '#290066',
-                        shadowColor: 'transparent',
-                        shadowRadius: 0,
-                        shadowOffset: {
-                            height: 0,
-                        }
-                    },
-                    headerTintColor: 'white',
-                }}
-            />
-            <Stack.Screen
-                name='UserInfo'
-                component={UserInfo}
-                options={{
-                    headerShown: false,
-                }}
-            />
-            <Stack.Screen
-                name='UserTabs'
-                component={UserTabs}
-                options={{
-                    title:'',
-                    headerShown: false,
-                }}
-            />
-            <Stack.Screen
-                name='GEO'
-                component={GEO_Function}
-                options={{
-                    title:'',
-                    headerStyle:{
-                        backgroundColor: '#290066',
-                        shadowColor: 'transparent',
-                        shadowRadius: 0,
-                        shadowOffset: {
-                            height: 0,
-                        }
-                    },
-                    headerTintColor: 'white',
-                }}
-            />
-        </Stack.Navigator>
-    );
-}
-
-
 export default function App() {
     const [AppStatus, setAppStatus] = React.useState({check_status: null});
     React.useEffect(()=>{
@@ -348,7 +254,7 @@ export default function App() {
             }catch (e) {
                console.log(e);
             }
-            setAppStatus({check_status:status})
+            setAppStatus({check_status : status});
         }
         Obtain_AppStatus();
     })
@@ -356,15 +262,18 @@ export default function App() {
     if (AppStatus.check_status === "false"){
         return (
             <NavigationContainer>
-                <MyAppStack_Sec/>
+                <MyAppStack
+                    initial_Route={"Login"}/>
+            </NavigationContainer>
+        );
+    }else{
+        return(
+            <NavigationContainer>
+                <MyAppStack
+                    initial_Route={"Welcome"}/>
             </NavigationContainer>
         );
     }
-    return(
-        <NavigationContainer>
-            <MyAppStack/>
-        </NavigationContainer>
-    );
 }
 
 const styles = StyleSheet.create({

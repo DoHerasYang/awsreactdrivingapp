@@ -28,7 +28,9 @@ export default class WelcomePages extends React.Component{
     async Check_Status(){
         try{
             const first_Status  = await AsyncStorage.getItem('AppStatus');
-            current_Status = first_Status !== "false";
+            if (first_Status !== "false"){
+                await AsyncStorage.setItem('AppStatus',"false");
+            }
         } catch(e){
             console.log(e);
         }
@@ -50,6 +52,7 @@ export default class WelcomePages extends React.Component{
         return(
             <View style={styles.container}>
                 <Swiper
+                    loop={false}
                     showButtons={true}
                     onScrollBeginDrag={(e,state,context) => this._ShowNavigation(e,state,context)}>
                     <View style={styles.slide1_Container}>
