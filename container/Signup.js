@@ -187,7 +187,7 @@ export default class Signup extends React.Component {
                             </TouchableOpacity>
                             <Item style={styles.itemStyle} rounded>
                                 <TextInput
-                                    placeholder='Verification Code'
+                                    placeholder='Input Verification Code'
                                     placeholderTextColor='#adb4bc'
                                     keyboardType={'email-address'}
                                     returnKeyType='next'
@@ -276,8 +276,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#fb5b5a',
-        padding: 14,
-        width: 230,
+        padding: 10,
+        width: 220,
         marginTop: 6,
         marginBottom: 35,
         borderRadius: 10,
@@ -285,15 +285,16 @@ const styles = StyleSheet.create({
     resend_buttonStyle:{
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#ff8080',
+        backgroundColor: '#fb5b5a',
+        borderRadius: 8,
         padding: 3,
     },
     button_inStyle:{
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#fb5b5a',
-        padding: 14,
-        width: 230,
+        padding: 10,
+        width: 220,
         marginTop: -9,
         borderRadius: 10,
         marginBottom: 35,

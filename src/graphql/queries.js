@@ -51,15 +51,15 @@ export const listUserinfos = /* GraphQL */ `
 export const getUsergeoinfo = /* GraphQL */ `
   query GetUsergeoinfo($id: ID!) {
     getUsergeoinfo(id: $id) {
-      firstname
-      lastname
-      geoinfo {
+      id
+      userid
+      name
+      geodetailedinfo {
         date
         lat
         lon
         speed
-        createdAt
-        updatedAt
+        distance
       }
       createdAt
       updatedAt
@@ -74,47 +74,16 @@ export const listUsergeoinfos = /* GraphQL */ `
   ) {
     listUsergeoinfos(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
-        firstname
-        lastname
-        geoinfo {
+        id
+        userid
+        name
+        geodetailedinfo {
           date
           lat
           lon
           speed
-          createdAt
-          updatedAt
+          distance
         }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getGeoinfo = /* GraphQL */ `
-  query GetGeoinfo($id: ID!) {
-    getGeoinfo(id: $id) {
-      date
-      lat
-      lon
-      speed
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listGeoinfos = /* GraphQL */ `
-  query ListGeoinfos(
-    $filter: ModelgeoinfoFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listGeoinfos(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        date
-        lat
-        lon
-        speed
         createdAt
         updatedAt
       }

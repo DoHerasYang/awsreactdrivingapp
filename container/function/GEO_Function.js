@@ -19,6 +19,13 @@ import MapView, {
 import * as Location from 'expo-location';
 import { getDistance } from 'geolib';
 import {obtain_Date} from "./Date_Function";
+import {Mutation_GEO} from "./User_GraphQL";
+
+import {Username} from "../user/UserScreen";
+import {uuid} from "../user/UserScreen";
+
+
+import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 
 
@@ -34,6 +41,9 @@ export default class GEO_Function extends React.Component{
                 latitude: 0,
                 longitude: 0,
             }
+        },
+        current_UserLocation:{
+            coordinate:{}
         },
         start_tracking: false,
         date: obtain_Date(),
@@ -53,12 +63,13 @@ export default class GEO_Function extends React.Component{
 
     componentDidMount() {
         this._getLocationAsync();
-        // this._watchPosition();
     }
 
-    componentWillUnmount() {
-        navigator.geolocation.clearWatch(this.watchID);
-        clearInterval(this.interval)
+
+    // Tracking Background Function
+    _trackingBackgroundFunction(){
+        this.onChangeStatus("start_tracking",true);
+        this._watchPosition();
     }
 
     // Zoom Button Function
@@ -68,7 +79,16 @@ export default class GEO_Function extends React.Component{
         let cur_lat = this.state.mapRegion.latitude;
         let cur_lon = this.state.mapRegion.longitude;
 
-        if(lat_Delta > 0.001 && lat_Delta<0.1){
+        if(lat_Delta > 0.01 && lat_Delta<0.1){
+            this.setState({
+                mapRegion:{
+                    latitude: cur_lat,
+                    longitude: cur_lon,
+                    latitudeDelta: (lat_Delta-0.003),
+                    longitudeDelta: (lon_Delta-0.003),
+                }
+            })
+        }else if (lat_Delta > 0.1){
             this.setState({
                 mapRegion:{
                     latitude: cur_lat,
@@ -77,13 +97,13 @@ export default class GEO_Function extends React.Component{
                     longitudeDelta: (lon_Delta-0.005),
                 }
             })
-        }else if (lat_Delta > 0.1){
+        }else if (lat_Delta > 0.001 && lat_Delta<=0.01 ){
             this.setState({
                 mapRegion:{
                     latitude: cur_lat,
                     longitude: cur_lon,
-                    latitudeDelta: (lat_Delta-0.05),
-                    longitudeDelta: (lon_Delta-0.05),
+                    latitudeDelta: (lat_Delta-0.0005),
+                    longitudeDelta: (lon_Delta-0.0005),
                 }
             })
         }
@@ -135,7 +155,18 @@ export default class GEO_Function extends React.Component{
                         distanceTraveled + (this.calculateDistanceTravelled(newPosition_Coordinate))/1000,
                     preLocation: newPosition_Coordinate,
                 });
-
+                const info = {
+                    userid: uuid,
+                    name: Username,
+                    geodetailedinfo:{
+                        date: this.state.date,
+                        lat: latitude,
+                        lon: longitude,
+                        speed: speed,
+                        distance: this.state.distanceTraveled,
+                    }
+                };
+                Mutation_GEO(info);
             },
             error => console.log(error),
             {
@@ -145,13 +176,34 @@ export default class GEO_Function extends React.Component{
             });
     }
 
+    // Update when the current user location change
+    _updateUserPosition = (value) =>{
+        this.setState({
+            current_UserLocation:{
+                coordinate: value.nativeEvent.coordinate,
+            }
+        })
+    }
+
+    // Focus on the current user region
+    _focusUserPosition = () =>{
+        this.setState({
+            mapRegion:{
+                latitude: this.state.current_UserLocation.coordinate.latitude,
+                longitude: this.state.current_UserLocation.coordinate.longitude,
+                latitudeDelta: this.state.mapRegion.latitudeDelta,
+                longitudeDelta: this.state.mapRegion.latitudeDelta,
+            }
+        })
+    }
+
     // Calculate the Travelled Distance
     calculateDistanceTravelled = (newCoordinate) =>{
         const { preLocation } = this.state;
         if(preLocation){
             return getDistance(preLocation,newCoordinate);
         }else {
-            return 0
+            return Number(0)
         }
     }
 
@@ -189,7 +241,6 @@ export default class GEO_Function extends React.Component{
                 longitude: initialMap.coords.longitude,
             },
         });
-
 
         // Initial Marker Initial position
         // let location = {
@@ -236,12 +287,21 @@ export default class GEO_Function extends React.Component{
         this.interval = setInterval(() => this.Display_Time(), 1000);
     }
 
-    closeStatus(tag,value){
+    _closeStatus(tag,value){
         this.setState({
             [tag]:value,
         });
         navigator.geolocation.clearWatch(this.watchID);
-        clearInterval(this.interval)
+        clearInterval(this.interval);
+        this._clearWatchStop();
+    }
+
+    _clearWatchStop(){
+        this.setState({
+            hour: Number(0),
+            minute: Number(0),
+            second: Number(0),
+        })
     }
 
 
@@ -255,7 +315,6 @@ export default class GEO_Function extends React.Component{
                 <View style={styles.mainContainer}>
                     <MapView
                         style={styles.mapStyle}
-                        provider="google"
                         initialRegion={{
                             latitude: latitude,
                             longitude: longitude,
@@ -263,18 +322,20 @@ export default class GEO_Function extends React.Component{
                             longitudeDelta: 0.00423,
                         }}
                         onPress={this._handleLocationUpdate}
-                        // onRegionChangeComplete={this._handleMapRegionChange}
+                        onUserLocationChange={this._updateUserPosition}
+                        userLocationUpdateInterval={10000}
+                        onRegionChangeComplete={this._handleMapRegionChange}
                         followsUserLocation={true}
                         showsUserLocation={true}
                         region={this.state.mapRegion}>
-                        <Marker
-                            coordinate={this.state.location.coords}
-                            draggable
-                            onDragEnd={this._handleLocationUpdate}/>
+                        {/*<Marker*/}
+                        {/*    coordinate={this.state.location.coords}*/}
+                        {/*    draggable*/}
+                        {/*    onDragEnd={this._handleLocationUpdate}/>*/}
                     </MapView>
                     <View style={styles.overContainer}>
                         <TouchableOpacity
-                            onPress={()=>this.onChangeStatus("start_tracking",true)}
+                            onPress={()=> this._trackingBackgroundFunction()}
                             style={styles.buttonStyle}>
                             <Text>Start Tracking</Text>
                         </TouchableOpacity>
@@ -282,6 +343,10 @@ export default class GEO_Function extends React.Component{
                 </View>
                 <View
                     style={styles.sideContainer}>
+                    <TouchableOpacity
+                        onPress={()=>this._focusUserPosition()}>
+                        <Ionicons name="md-locate" size={33} color="black" style={{marginBottom:25}} />
+                    </TouchableOpacity>
                     <TouchableOpacity
                         onPress={()=>this._zoomInDelta()}>
                         <FontAwesome name="plus-square" size={30} color="black" style={{marginBottom:25}} />
@@ -301,7 +366,6 @@ export default class GEO_Function extends React.Component{
                 <View style={styles.mainContainer}>
                     <MapView
                         style={styles.mapStyle}
-                        provider="google"
                         initialRegion={{
                             latitude: this.state.initialMap.coords.latitude,
                             longitude: this.state.initialMap.coords.longitude,
@@ -310,6 +374,8 @@ export default class GEO_Function extends React.Component{
                         }}
                         onPress={this._handleLocationUpdate}
                         onRegionChangeComplete={this._handleMapRegionChange}
+                        onUserLocationChange={this._updateUserPosition}
+                        userLocationUpdateInterval={10000}
                         followsUserLocation={true}
                         showsUserLocation={true}
                         region={this.state.mapRegion}>
@@ -330,13 +396,17 @@ export default class GEO_Function extends React.Component{
                     </View>
                     <View style={styles.overContainer}>
                         <TouchableOpacity
-                            onPress={()=>this.onChangeText("start_tracking",false)}
+                            onPress={()=>this._closeStatus("start_tracking",false)}
                             style={styles.buttonStyle}>
                             <Text>Stop Tracking</Text>
                         </TouchableOpacity>
                     </View>
                     <View
                         style={styles.sideContainer}>
+                        <TouchableOpacity
+                            onPress={()=>this._focusUserPosition()}>
+                            <Ionicons name="md-locate" size={33} color="black" style={{marginBottom:25}} />
+                        </TouchableOpacity>
                         <TouchableOpacity
                             onPress={()=>this._zoomInDelta()}>
                             <FontAwesome name="plus-square" size={30} color="black" style={{marginBottom:25}} />
@@ -407,8 +477,7 @@ const styles = StyleSheet.create({
     },
     mapStyle:{
         alignSelf: 'stretch',
-        width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
+        ...StyleSheet.absoluteFillObject
     },
     buttonStyle:{
         width: 130,

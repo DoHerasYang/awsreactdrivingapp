@@ -64,15 +64,15 @@ export const onDeleteUserinfo = /* GraphQL */ `
 export const onCreateUsergeoinfo = /* GraphQL */ `
   subscription OnCreateUsergeoinfo {
     onCreateUsergeoinfo {
-      firstname
-      lastname
-      geoinfo {
+      id
+      userid
+      name
+      geodetailedinfo {
         date
         lat
         lon
         speed
-        createdAt
-        updatedAt
+        distance
       }
       createdAt
       updatedAt
@@ -82,15 +82,15 @@ export const onCreateUsergeoinfo = /* GraphQL */ `
 export const onUpdateUsergeoinfo = /* GraphQL */ `
   subscription OnUpdateUsergeoinfo {
     onUpdateUsergeoinfo {
-      firstname
-      lastname
-      geoinfo {
+      id
+      userid
+      name
+      geodetailedinfo {
         date
         lat
         lon
         speed
-        createdAt
-        updatedAt
+        distance
       }
       createdAt
       updatedAt
@@ -100,52 +100,16 @@ export const onUpdateUsergeoinfo = /* GraphQL */ `
 export const onDeleteUsergeoinfo = /* GraphQL */ `
   subscription OnDeleteUsergeoinfo {
     onDeleteUsergeoinfo {
-      firstname
-      lastname
-      geoinfo {
+      id
+      userid
+      name
+      geodetailedinfo {
         date
         lat
         lon
         speed
-        createdAt
-        updatedAt
+        distance
       }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateGeoinfo = /* GraphQL */ `
-  subscription OnCreateGeoinfo {
-    onCreateGeoinfo {
-      date
-      lat
-      lon
-      speed
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateGeoinfo = /* GraphQL */ `
-  subscription OnUpdateGeoinfo {
-    onUpdateGeoinfo {
-      date
-      lat
-      lon
-      speed
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteGeoinfo = /* GraphQL */ `
-  subscription OnDeleteGeoinfo {
-    onDeleteGeoinfo {
-      date
-      lat
-      lon
-      speed
       createdAt
       updatedAt
     }

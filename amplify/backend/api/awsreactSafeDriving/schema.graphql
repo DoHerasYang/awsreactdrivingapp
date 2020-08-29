@@ -14,14 +14,16 @@ type userinfo @model{
 }
 
 type usergeoinfo @model{
-  firstname: String
-  lastname: String
-  geoinfo: [geoinfo]
+  id: ID!
+  userid: ID
+  name: String!
+  geodetailedinfo: [geoinfo]
 }
 
-type geoinfo @model{
-  date: String
-  lat: Float
-  lon: Float
-  speed: Float
+type geoinfo {
+  date: String!
+  lat: Float!
+  lon: Float!
+  speed: Float!
+  distance: Float!
 }

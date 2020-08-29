@@ -87,8 +87,8 @@ export default class UserInfo extends Component{
     render() {
         const scrollEnabled = this.state.screenHeight > height;
         return(
-            <SafeAreaView>
-                <StatusBar barStyle="light-content" backgroundColor="#ffffff"/>
+            <SafeAreaView style={style_ScrollView.container}>
+                <StatusBar barStyle="dark" hidden={false}/>
                     <ScrollView
                         Style={{flex:1}}
                         scrollEnabled={scrollEnabled}
@@ -135,7 +135,7 @@ export default class UserInfo extends Component{
                                     {/*lastname*/}
                                     <Item style={style_ScrollView.input_ItemStyle}>
                                         <Form style={style_ScrollView.sec_TextStyle}>
-                                            <Label style={{marginTop:19}}>Last Name</Label>
+                                            <Label style={{marginTop:19,color:"white"}}>Last Name</Label>
                                         </Form>
                                         <Input
                                             style={style_ScrollView.input_Style}
@@ -150,7 +150,7 @@ export default class UserInfo extends Component{
                                     {/*ageGroup*/}
                                     <Item style={style_ScrollView.input_ItemStyle}>
                                         <Form style={style_ScrollView.sec_ItemStyle}>
-                                            <Label style={{marginTop:19}}>Age Group</Label>
+                                            <Label style={{marginTop:19,color:"white"}}>Age Group</Label>
                                         </Form>
                                         <Picker
                                             placeholder="Age Group"
@@ -171,7 +171,7 @@ export default class UserInfo extends Component{
                                     {/*PostCode*/}
                                     <Item style={style_ScrollView.input_ItemStyle} inlineLabel>
                                         <Form style={style_ScrollView.sec_TextStyle}>
-                                            <Label style={{marginTop:20}}>PostCode</Label>
+                                            <Label style={{marginTop:19,color:"white"}}>PostCode</Label>
                                         </Form>
                                         <Input
                                             style={style_ScrollView.input_Style}
@@ -186,7 +186,7 @@ export default class UserInfo extends Component{
                                     <Item style={style_ScrollView.input_ItemStyle}>
                                         <Form style={style_ScrollView.sec_DateStyle}>
                                             <Form style={{marginLeft:5,marginRight:35,alignItems:'center',}}>
-                                                <Label style={{marginTop:20}}>Date Of Birth</Label>
+                                                <Label style={{marginTop:19,color:"white"}}>Date Of Birth</Label>
                                             </Form>
                                             <Form style={{marginTop:10}}>
                                                 <DatePicker
@@ -203,7 +203,7 @@ export default class UserInfo extends Component{
                                     {/*Email*/}
                                     <Item style={style_ScrollView.input_ItemStyle} inlineLabel>
                                         <Form style={style_ScrollView.sec_TextStyle}>
-                                            <Label style={{marginTop:20}}>Email</Label>
+                                            <Label style={{marginTop:19,color:"white"}}>Email</Label>
                                         </Form>
                                         <Input
                                             style={style_ScrollView.input_Style}
@@ -217,7 +217,7 @@ export default class UserInfo extends Component{
                                     {/*Time Of Driving*/}
                                     <Item style={style_ScrollView.input_ItemStyle}>
                                         <Form style={style_ScrollView.sec_ItemStyle}>
-                                            <Label style={{marginTop:20}}>Time of Driving</Label>
+                                            <Label style={{marginTop:19,color:"white"}}>Time of Driving</Label>
                                         </Form>
                                         <Picker
                                             placeholder="Time of Driving"
@@ -236,7 +236,7 @@ export default class UserInfo extends Component{
                                     {/*Time Of Commuting*/}
                                     <Item style={style_ScrollView.input_ItemStyle}>
                                         <Form style={style_ScrollView.sec_ItemStyle}>
-                                            <Label style={{marginTop:20}}>Commuting</Label>
+                                            <Label style={{marginTop:19,color:"white"}}>Commuting</Label>
                                         </Form>
                                         <Picker
                                             placeholder="Commuting Hours"
@@ -269,19 +269,21 @@ export default class UserInfo extends Component{
 const style_ScrollView = StyleSheet.create({
     container:{
         flexGrow:1,
+        backgroundColor: "#290066",
     },
     container_Info:{
         flexGrow: 1,
+        backgroundColor: "#290066",
     },
     form_Style:{
         alignItems: 'center',
     },
     header_View:{
-        marginTop: 20,
+        marginTop: 30,
         alignItems: 'flex-start',
         alignContent: 'center',
-        backgroundColor: '#ffe5b3',
-        marginBottom: 40,
+        // backgroundColor: '#ffe5b3',
+        marginBottom: 10,
     },
     header_Text:{
         fontSize: 28,
@@ -299,14 +301,14 @@ const style_ScrollView = StyleSheet.create({
     sec_ItemStyle:{
         alignItems: 'center',
         marginRight: 20,
-        backgroundColor: '#ffe5b3',
+        // backgroundColor: '#ffe5b3',
         height: 40,
         width: 115,
     },
     sec_TextStyle:{
         alignItems: 'center',
         marginRight: 32,
-        backgroundColor: '#ffe5b3',
+        // backgroundColor: '#ffe5b3',
         height: 40,
         width: 115,
     },
@@ -314,14 +316,14 @@ const style_ScrollView = StyleSheet.create({
         flexDirection: 'row',
         width: 200,
         height: 40,
-        backgroundColor: '#ffe5b3',
+        // backgroundColor: '#ffe5b3',
     },
     input_Style:{
         height: 50,
         marginBottom: -15,
     },
     button_Style:{
-        backgroundColor: "#c49191",
+        backgroundColor: "#ff4d4d",
         width:"80%",
         borderRadius:25,
         height:50,

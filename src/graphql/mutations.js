@@ -76,15 +76,15 @@ export const createUsergeoinfo = /* GraphQL */ `
     $condition: ModelusergeoinfoConditionInput
   ) {
     createUsergeoinfo(input: $input, condition: $condition) {
-      firstname
-      lastname
-      geoinfo {
+      id
+      userid
+      name
+      geodetailedinfo {
         date
         lat
         lon
         speed
-        createdAt
-        updatedAt
+        distance
       }
       createdAt
       updatedAt
@@ -97,15 +97,15 @@ export const updateUsergeoinfo = /* GraphQL */ `
     $condition: ModelusergeoinfoConditionInput
   ) {
     updateUsergeoinfo(input: $input, condition: $condition) {
-      firstname
-      lastname
-      geoinfo {
+      id
+      userid
+      name
+      geodetailedinfo {
         date
         lat
         lon
         speed
-        createdAt
-        updatedAt
+        distance
       }
       createdAt
       updatedAt
@@ -118,61 +118,16 @@ export const deleteUsergeoinfo = /* GraphQL */ `
     $condition: ModelusergeoinfoConditionInput
   ) {
     deleteUsergeoinfo(input: $input, condition: $condition) {
-      firstname
-      lastname
-      geoinfo {
+      id
+      userid
+      name
+      geodetailedinfo {
         date
         lat
         lon
         speed
-        createdAt
-        updatedAt
+        distance
       }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createGeoinfo = /* GraphQL */ `
-  mutation CreateGeoinfo(
-    $input: CreateGeoinfoInput!
-    $condition: ModelgeoinfoConditionInput
-  ) {
-    createGeoinfo(input: $input, condition: $condition) {
-      date
-      lat
-      lon
-      speed
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateGeoinfo = /* GraphQL */ `
-  mutation UpdateGeoinfo(
-    $input: UpdateGeoinfoInput!
-    $condition: ModelgeoinfoConditionInput
-  ) {
-    updateGeoinfo(input: $input, condition: $condition) {
-      date
-      lat
-      lon
-      speed
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteGeoinfo = /* GraphQL */ `
-  mutation DeleteGeoinfo(
-    $input: DeleteGeoinfoInput!
-    $condition: ModelgeoinfoConditionInput
-  ) {
-    deleteGeoinfo(input: $input, condition: $condition) {
-      date
-      lat
-      lon
-      speed
       createdAt
       updatedAt
     }

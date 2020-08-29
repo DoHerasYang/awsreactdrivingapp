@@ -11,8 +11,6 @@ import Swiper from 'react-native-swiper';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AppLoading} from "expo";
 
-let current_Status = true
-
 export default class WelcomePages extends React.Component{
 
     state = {

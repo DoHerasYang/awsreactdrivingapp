@@ -92,7 +92,6 @@ export default class AuthLoad extends React.Component {
         }else{
             this.props.navigation.navigate(this.state.aws_userToken? 'UserInfo':'Login');
         }
-
     }
 
     render() {

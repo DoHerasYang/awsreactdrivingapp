@@ -20,10 +20,14 @@ import { Auth } from 'aws-amplify';
 import Amplify from '@aws-amplify/core';
 import config from '../../aws-exports';
 import AsyncStorage from "@react-native-community/async-storage";
-import {LinearGradient} from "expo-linear-gradient";
 
+export let uuid = null;
 
 Amplify.configure(config)
+
+// Global Variables for application
+export let Username = null
+
 
 export default class UserScreen extends React.Component{
 
@@ -32,6 +36,7 @@ export default class UserScreen extends React.Component{
         user_name: null,
         temperature: null,
         city_name: null,
+        uuid: null,
     }
 
     // The function to reconfirm the user preference
@@ -84,16 +89,19 @@ export default class UserScreen extends React.Component{
         this.setState({
             user_profile: gqldata,
         });
-        this.state.user_profile.map((pet,index)=>(
+        this.state.user_profile.map((pet,index) =>(
             this.setState({
                 user_name: pet.firstname+' '+pet.lastname,
+                uuid: pet.id,
             })
         ))
+        uuid = this.state.uuid;
+        Username  = this.state.user_name;
     }
 
     async componentDidMount(){
-        this.obtain_Name();
-        this.obtain_temp();
+        await this.obtain_Name();
+        await this.obtain_temp();
         AsyncStorage.getItem('default',(error,result)=>{
             if(result === 1){
                 Alert.alert(

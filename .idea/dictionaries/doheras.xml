@@ -3,12 +3,14 @@
     <words>
       <w>appid</w>
       <w>awsconfig</w>
+      <w>geoinfo</w>
       <w>gqldata</w>
       <w>lastcolumn</w>
       <w>openweathermap</w>
       <w>signup</w>
       <w>swiper</w>
       <w>textcolumn</w>
+      <w>userid</w>
     </words>
   </dictionary>
 </component>

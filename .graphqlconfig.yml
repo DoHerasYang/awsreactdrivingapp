@@ -1,6 +1,6 @@
 projects:
   awsreactSafeDriving:
-    schemaPath: src/graphql/schema.json
+    schemaPath: amplify/backend/api/awsreactSafeDriving/build/schema.graphql
     includes:
       - src/graphql/**/*.js
     excludes:
