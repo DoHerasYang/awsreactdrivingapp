@@ -62,7 +62,9 @@ export default class AuthLoad extends React.Component {
     // Obtain the Username
     async Obtain_User(){
         await AsyncStorage.getItem('CurrentUser')
-            .then(value => this.setState({username:value}))
+            .then(value => this.setState({
+                username:value
+            }));
     }
 
     async Check_UserInfo(){
@@ -86,7 +88,10 @@ export default class AuthLoad extends React.Component {
                 let re_Token = user.getSignInUserSession().getAccessToken().getJwtToken()
                 this.setState({aws_userToken: re_Token})
             })
-            .catch( (error)=> console.log(error))
+            .catch( (error)=> {
+                console.log(error);
+                this.props.navigation.navigate("Login");
+            });
         if(this.state.info_label){
             this.props.navigation.navigate(this.state.aws_userToken? 'UserTabs':'Login');
         }else{

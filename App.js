@@ -16,13 +16,10 @@ import UserInfo from "./container/user/UserInfo";
 import ForgetPassword from './container/ForgetPasswordScreen';
 import AuthLoadScreen from "./container/AuthLoad";
 
-
 // User Pages
-import MainPage from "./container/MainPage";
 import UserScreen from "./container/user/UserScreen";
 import SettingPage from "./container/user/SettingScreen";
 import GEO_Function from "./container/function/GEO_Function";
-
 
 // import the icons
 import { Ionicons } from '@expo/vector-icons';
@@ -30,7 +27,6 @@ import { Ionicons } from '@expo/vector-icons';
 // AWS Configs
 import Amplify from '@aws-amplify/core';
 import config from './aws-exports';
-import {exp} from "react-native-reanimated";
 Amplify.configure(config);
 
 // // Create the Stack for Auth and Login or Sing up Function Pages
@@ -88,7 +84,6 @@ Amplify.configure(config);
 //     }
 // };
 
-
 //Configure the tabs for stack
 const Tab = createMaterialTopTabNavigator();
 
@@ -143,13 +138,12 @@ function UserTabs(){
     )
 }
 
-
 const Stack = createStackNavigator();
 
-function MyAppStack(initial_Route){
+function MyAppStack({initialRouteName}){
     return (
         <Stack.Navigator
-            initialRouteName={initial_Route}>
+            initialRouteName={initialRouteName}>
             <Stack.Screen
                 name="WelcomePages"
                 component={WelcomePages}
@@ -245,12 +239,14 @@ function MyAppStack(initial_Route){
 }
 
 export default function App() {
+
     const [AppStatus, setAppStatus] = React.useState({check_status: null});
+
     React.useEffect(()=>{
         let status;
         async function Obtain_AppStatus(){
             try{
-                status = await AsyncStorage.getItem('AppStatus')
+                status = await AsyncStorage.getItem('AppStatus');
             }catch (e) {
                console.log(e);
             }
@@ -263,28 +259,15 @@ export default function App() {
         return (
             <NavigationContainer>
                 <MyAppStack
-                    initial_Route={"Login"}/>
+                    initialRouteName={"Login"}/>
             </NavigationContainer>
         );
     }else{
         return(
             <NavigationContainer>
                 <MyAppStack
-                    initial_Route={"Welcome"}/>
+                    initialRouteName={"WelcomePages"}/>
             </NavigationContainer>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    header_Style:{
-        backgroundColor: '#290066',
-        shadowColor: 'transparent',
-        shadowRadius: 0,
-        shadowOffset: {
-            height: 0,
-        }
-    },
-})
-
-

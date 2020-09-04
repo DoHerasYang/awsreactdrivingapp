@@ -14,7 +14,6 @@ import {
 import {obtain_WeatherJson} from "../function/Weather_Info";
 import {obtain_tips} from "../function/Tips_Funtion";
 import {Query_UserName} from "../function/User_GraphQL";
-import {current_username} from "../Login";
 
 import { Auth } from 'aws-amplify';
 import Amplify from '@aws-amplify/core';
@@ -26,8 +25,7 @@ export let uuid = null;
 Amplify.configure(config)
 
 // Global Variables for application
-export let Username = null
-
+export let Username = null;
 
 export default class UserScreen extends React.Component{
 
@@ -106,17 +104,17 @@ export default class UserScreen extends React.Component{
             if(result === 1){
                 Alert.alert(
                     "Alert",
-                    "Allow access to your GEO location",
+                    "Allow access to your GEO location and track your position",
                     [
                         {
                             text: "No",
-                            onPress:()=> this.reconfirm_function(),
+                            onPress:() => this.reconfirm_function(),
                             style: Platform.OS==="ios"? "cancel":"negative"
                         },
                         {
                             text: "Yes",
                             style: Platform.OS==='ios'? 'destructive':'positive',
-                            onPress:()=>this.Async_Store(),
+                            onPress:() => this.Async_Store(),
                         }
                     ],
                     { cancelable: false}

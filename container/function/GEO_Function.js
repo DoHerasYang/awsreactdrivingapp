@@ -3,6 +3,7 @@ import {
     StyleSheet,
     View,
     Text,
+    AppState,
     Alert,
     Platform,
     Dimensions,
@@ -14,12 +15,14 @@ import MapView, {
     Marker,
     MapViewAnimated,
     AnimatedRegion,
-    Polyline,} from 'react-native-maps';
+    Polyline,
+} from 'react-native-maps';
 
 import * as Location from 'expo-location';
 import { getDistance } from 'geolib';
 import {obtain_Date} from "./Date_Function";
 import {Mutation_GEO} from "./User_GraphQL";
+import {SpeedLimit_Obtain} from "./SpeedLimit";
 
 import {Username} from "../user/UserScreen";
 import {uuid} from "../user/UserScreen";
@@ -33,6 +36,7 @@ export default class GEO_Function extends React.Component{
 
     // Configure the default state
     state = {
+        appState: AppState.currentState,
         initialMap: null,
         mapRegion: null,
         logLocation: null,
@@ -45,6 +49,7 @@ export default class GEO_Function extends React.Component{
         current_UserLocation:{
             coordinate:{}
         },
+        maxspeed: null,
         start_tracking: false,
         date: obtain_Date(),
         routeCoordinates:[],
@@ -65,10 +70,25 @@ export default class GEO_Function extends React.Component{
         this._getLocationAsync();
     }
 
+    // Detect the AppStatus
+    _detectAppStatus = (nextAppState) =>{
+        this.setState({
+            appState: nextAppState
+        });
+    }
+    _CheckAppStatus(){
+        if(this.state.appState.match(/inactive|background/)){
+            return String("Background")
+        }else{
+            return String("Active")
+        }
+    }
 
     // Tracking Background Function
-    _trackingBackgroundFunction(){
+    _trackingBackgroundFunction = () =>{
         this.onChangeStatus("start_tracking",true);
+        // Add the Event Listener
+        AppState.addEventListener('change',this._detectAppStatus);
         this._watchPosition();
     }
 
@@ -137,11 +157,13 @@ export default class GEO_Function extends React.Component{
 
     }
 
-    _watchPosition = () =>{
+    _watchPosition = async() =>{
         this.watchID = navigator.geolocation.watchPosition(
-            position => {
+            async(position) => {
                 const { routeCoordinates, distanceTraveled} = this.state;
                 const { latitude, longitude, speed } = position.coords;
+                let maxspeed = await SpeedLimit_Obtain(latitude,longitude);
+                let appStatus = this._CheckAppStatus();
                 const newPosition_Coordinate = {
                     latitude,
                     longitude,
@@ -162,7 +184,9 @@ export default class GEO_Function extends React.Component{
                         date: this.state.date,
                         lat: latitude,
                         lon: longitude,
+                        appstatus: appStatus.toString(),
                         speed: speed,
+                        maxspeed: maxspeed.toString(),
                         distance: this.state.distanceTraveled,
                     }
                 };
@@ -177,12 +201,12 @@ export default class GEO_Function extends React.Component{
     }
 
     // Update when the current user location change
-    _updateUserPosition = (value) =>{
+    _updateUserPosition = async (value) =>{
         this.setState({
             current_UserLocation:{
                 coordinate: value.nativeEvent.coordinate,
-            }
-        })
+            },
+        });
     }
 
     // Focus on the current user region
@@ -292,6 +316,7 @@ export default class GEO_Function extends React.Component{
             [tag]:value,
         });
         navigator.geolocation.clearWatch(this.watchID);
+        AppState.removeEventListener('change', this._handleAppStateChange);
         clearInterval(this.interval);
         this._clearWatchStop();
     }
@@ -303,7 +328,6 @@ export default class GEO_Function extends React.Component{
             second: Number(0),
         })
     }
-
 
     // Interface
     // Initialize when user enter in this interface
@@ -335,7 +359,7 @@ export default class GEO_Function extends React.Component{
                     </MapView>
                     <View style={styles.overContainer}>
                         <TouchableOpacity
-                            onPress={()=> this._trackingBackgroundFunction()}
+                            onPress={this._trackingBackgroundFunction}
                             style={styles.buttonStyle}>
                             <Text>Start Tracking</Text>
                         </TouchableOpacity>

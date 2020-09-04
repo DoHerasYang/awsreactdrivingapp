@@ -24,6 +24,8 @@ type geoinfo {
   date: String!
   lat: Float!
   lon: Float!
+  appstatus: String,
   speed: Float!
+  maxspeed: String
   distance: Float!
 }

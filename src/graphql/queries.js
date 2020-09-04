@@ -58,7 +58,9 @@ export const getUsergeoinfo = /* GraphQL */ `
         date
         lat
         lon
+        appstatus
         speed
+        maxspeed
         distance
       }
       createdAt
@@ -81,7 +83,9 @@ export const listUsergeoinfos = /* GraphQL */ `
           date
           lat
           lon
+          appstatus
           speed
+          maxspeed
           distance
         }
         createdAt

@@ -71,7 +71,9 @@ export const onCreateUsergeoinfo = /* GraphQL */ `
         date
         lat
         lon
+        appstatus
         speed
+        maxspeed
         distance
       }
       createdAt
@@ -89,7 +91,9 @@ export const onUpdateUsergeoinfo = /* GraphQL */ `
         date
         lat
         lon
+        appstatus
         speed
+        maxspeed
         distance
       }
       createdAt
@@ -107,7 +111,9 @@ export const onDeleteUsergeoinfo = /* GraphQL */ `
         date
         lat
         lon
+        appstatus
         speed
+        maxspeed
         distance
       }
       createdAt

@@ -30,7 +30,9 @@ const uploadGeo = `
         date
         lat
         lon
+        appstatus
         speed
+        maxspeed
         distance
       }
       createdAt
@@ -51,8 +53,12 @@ export async function Query_UserName(cur_account){
 
 export async function Mutation_GEO(info) {
     try{
-        const gql = await API.graphql(graphqlOperation(uploadGeo,{input:info}));
-        console.log("Successfully!");
+        await API.graphql(graphqlOperation(uploadGeo,{input:info}))
+            .then(
+                (value) =>{
+                    console.log("Successfully!");
+                }
+            )
     }catch (e) {
         console.log(e);
     }

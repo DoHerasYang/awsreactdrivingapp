@@ -14,7 +14,8 @@ import {
 import {
     Container,
     Item,
-    Input} from 'native-base';
+    Input
+} from 'native-base';
 
 // Import the icons
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -29,7 +30,6 @@ const tips = [
 
 // The Class to provide the tips for user
 // Obtain from the remote server
-
 
 function column_iconItem(sid){
     let icon_stack = [];
@@ -50,7 +50,6 @@ function column_TextItem(sid) {
         <Text key={sid} style={styles.text_Style}>{tips[sid][0]}</Text>
     )
 }
-
 
 export function obtain_tips(){
     return(

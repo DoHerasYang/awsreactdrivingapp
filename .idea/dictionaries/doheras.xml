@@ -2,10 +2,12 @@
   <dictionary name="doheras">
     <words>
       <w>appid</w>
+      <w>appstatus</w>
       <w>awsconfig</w>
       <w>geoinfo</w>
       <w>gqldata</w>
       <w>lastcolumn</w>
+      <w>maxspeed</w>
       <w>openweathermap</w>
       <w>signup</w>
       <w>swiper</w>

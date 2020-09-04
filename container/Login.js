@@ -8,6 +8,9 @@ import {
     Keyboard,
     TouchableHighlight,
     Alert,
+    Dimensions,
+    Animated,
+    Easing,
     ActivityIndicator} from 'react-native';
 
 import { Auth } from 'aws-amplify';
@@ -15,17 +18,19 @@ import Amplify from '@aws-amplify/core';
 import config from '../aws-exports';
 import { BlurView } from 'expo-blur';
 import AsyncStorage from '@react-native-community/async-storage';
-import {AppLoading} from "expo";
-
 
 Amplify.configure(config)
 
 export let current_username = null;
+const { width, height} = Dimensions.get('window');
 
 export default class Login extends React.Component {
 
     state = {
-        loadStatus: false,
+        fadeInOpacity: new Animated.Value(0),
+        buttonfadeInOpacity: new Animated.Value(0),
+        buttonHeightY: new Animated.Value(height),
+        activityLabel: true,
         username: '',
         password: '',
         auth_label: false,
@@ -33,6 +38,82 @@ export default class Login extends React.Component {
         indicator_label: false,
         intensity_value: 0,
     };
+
+    // Constructor
+    constructor(props) {
+        super(props);
+        this.FadeInAnimated();
+    }
+
+    // Initial the Initial Interface
+    FadeInAnimated(){
+        let pictureAnimated = Animated.timing(
+            this.state.fadeInOpacity,
+            {
+                toValue: 1,
+                duration: 1500,
+                easing: Easing.linear,
+                useNativeDriver: false,
+            }
+        );
+        let buttonOpacityAnimated = Animated.timing(
+            this.state.buttonfadeInOpacity,
+            {
+                toValue: 0.78,
+                duration: 1500,
+                easing: Easing.linear,
+                useNativeDriver: false,
+            }
+        );
+        let buttonHeightAnimated = Animated.timing(
+            this.state.buttonHeightY,
+            {
+                toValue: height-200-100-50-20-20-20-10-10-10-5-5-3-2-1,
+                duration: 1500,
+                easing: Easing.linear,
+                useNativeDriver: false,
+            }
+        );
+        Animated.parallel([
+            pictureAnimated,
+            buttonOpacityAnimated,
+            buttonHeightAnimated
+        ]).start();
+    }
+
+    // Function to navigate or render the new Component
+
+    _ClickNavigation = () => {
+        this.props.navigation.navigate("Signup");
+    }
+
+    _ClickRendering = () => {
+        this.setState({
+            activityLabel : false,
+        })
+    }
+
+    renderNavigationScreen(){
+        return(
+            <View style={navigationStyles.container}>
+                <Animated.Image
+                    style={{resizeMode: "cover", opacity: this.state.fadeInOpacity, height: 230, width: 330, top: height*0.25, left: 20}}
+                    source={require("../assets/splash.png")}/>
+                <Animated.View style={[navigationStyles.bottomView_Style,{ opacity:this.state.buttonfadeInOpacity, top:this.state.buttonHeightY}]}>
+                    <Text style={navigationStyles.hintText_Style}>Don't Have Account?</Text>
+                    <TouchableOpacity style={navigationStyles.touchOpacity1_Style}
+                        onPress={this._ClickNavigation}>
+                        <Text style={navigationStyles.touchOpacity1_TextStyle}>Sign Up Now</Text>
+                    </TouchableOpacity>
+                    <Text style={navigationStyles.hintText_Style}>Already Have Account?</Text>
+                    <TouchableOpacity style={[navigationStyles.touchOpacity2_Style]}
+                        onPress={this._ClickRendering}>
+                        <Text style={navigationStyles.touchOpacity1_TextStyle}>Sign In Now</Text>
+                    </TouchableOpacity>
+                </Animated.View>
+            </View>
+        )
+    }
 
     // Store the Local data for current user
     async StoreData (username) {
@@ -42,7 +123,6 @@ export default class Login extends React.Component {
                 await AsyncStorage.clear();
                 await AsyncStorage.setItem('CurrentUser', username);
                 await AsyncStorage.setItem('default', '1');
-                await AsyncStorage.setItem('AppStatus',"false");
             }
             // await AsyncStorage.setItem('default', '0');
             // await AsyncStorage.removeItem('default');
@@ -67,15 +147,12 @@ export default class Login extends React.Component {
                     this.setState({
                         intensity_value: 0,
                         indicator_label: false,
-                    })
-                    this.setState({
                         password: '',
                     })
                 })
         }catch (e) {
             this.setState({
                 intensity_value: 0,
-                username: '',
                 password: '',
                 indicator_label: false,
             });
@@ -83,72 +160,68 @@ export default class Login extends React.Component {
         }
     }
 
-    componentDidMount() {
-        this.setState({loadStatus: true})
-    }
 
+    // Class render function
     render() {
         const {navigate} = this.props.navigation;
-        if(!this.state.loadStatus){
+        if(this.state.activityLabel){
             return(
-                <AppLoading/>
-            )
-        }else{
-            return (
-                <View style={styles.container}>
-                    <Text style={styles.logo}>DrivingBeacon</Text>
-                    <View style={styles.inputView}>
-                        <TextInput
-                            value={this.state.username}
-                            style={styles.inputText}
-                            placeholder="Username"
-                            placeholderTextColor="#003f5c"
-                            keyboardType='email-address'
-                            autoCapitalize='none'
-                            autoCorrect={false}
-                            onChangeText={(username) => this.setState({username})}/>
-                    </View>
-                    <View style={styles.inputView}>
-                        <TextInput
-                            value={this.state.password}
-                            secureTextEntry={true}
-                            style={styles.inputText}
-                            placeholder="Password"
-                            keyboardType="default"
-                            placeholderTextColor="#003f5c"
-                            autoCapitalize='none'
-                            autoCorrect={false}
-                            onChangeText={(password) => this.setState({password})}/>
-                    </View>
-                    <TouchableOpacity
-                        onPress={() => navigate('ForgetPassword')}>
-                        <Text style={styles.forgot}>Forgot Password?</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[!this.state.auth_label&&styles.loginBtn,
-                            this.state.auth_label&&styles.disable_Btn]}
-                        onPress={this.handleSubmit.bind(this)}
-                        activeOpacity={0.3}
-                        disabled={this.state.auth_label}>
-                        <Text style={styles.loginText}>LOG IN</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => navigate('Signup')}>
-                        <Text style={styles.loginText}>Sign up</Text>
-                    </TouchableOpacity>
-                    <BlurView
-                        intensity={this.state.intensity_value}
-                        tint={"dark"}
-                        style={[this.state.indicator_label&&StyleSheet.absoluteFill,styles.nonBlurredContent]}>
-                        <Text style={[styles.hide_loadingStyle,this.state.indicator_label&&styles.loading_textStyle]}>Loading...</Text>
-                        <ActivityIndicator animating={this.state.indicator_label} size="large"/>
-                    </BlurView>
-                </View>
+                this.renderNavigationScreen()
             )
         }
+        return (
+            <View style={styles.container}>
+                <Text style={styles.logo}>DrivingBeacon</Text>
+                <View style={styles.inputView}>
+                    <TextInput
+                        value={this.state.username}
+                        style={styles.inputText}
+                        placeholder="Username"
+                        placeholderTextColor="#003f5c"
+                        keyboardType='email-address'
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        onChangeText={(username) => this.setState({username})}/>
+                </View>
+                <View style={styles.inputView}>
+                    <TextInput
+                        value={this.state.password}
+                        secureTextEntry={true}
+                        style={styles.inputText}
+                        placeholder="Password"
+                        keyboardType="default"
+                        placeholderTextColor="#003f5c"
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        onChangeText={(password) => this.setState({password})}/>
+                </View>
+                <TouchableOpacity
+                    onPress={() => navigate('ForgetPassword')}>
+                    <Text style={styles.forgot}>Forgot Password?</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[!this.state.auth_label&&styles.loginBtn,
+                        this.state.auth_label&&styles.disable_Btn]}
+                    onPress={this.handleSubmit.bind(this)}
+                    activeOpacity={0.3}
+                    disabled={this.state.auth_label}>
+                    <Text style={styles.loginText}>LOG IN</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => navigate('Signup')}>
+                    <Text style={styles.loginText}>Sign up</Text>
+                </TouchableOpacity>
+                <BlurView
+                    intensity={this.state.intensity_value}
+                    tint={"dark"}
+                    style={[this.state.indicator_label&&StyleSheet.absoluteFill,styles.nonBlurredContent]}>
+                    <Text style={[styles.hide_loadingStyle,this.state.indicator_label&&styles.loading_textStyle]}>Loading...</Text>
+                    <ActivityIndicator animating={this.state.indicator_label} size="large"/>
+                </BlurView>
+            </View>
+        )
     }
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -221,3 +294,47 @@ const styles = StyleSheet.create({
         fontWeight: "400",
     },
 });
+
+const navigationStyles = StyleSheet.create({
+    container:{
+        flex: 1,
+        backgroundColor: '#290066',
+    },
+    bottomView_Style:{
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        top: height*0.39,
+        marginTop: 30,
+    },
+    hintText_Style:{
+        fontSize: 13,
+        fontWeight: "600",
+        color: "white",
+        marginBottom: 10,
+    },
+    touchOpacity1_Style:{
+        width: "70%",
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: 'green',
+        alignItems: 'center',
+        justifyContent:"center",
+        marginBottom: 20,
+    },
+    touchOpacity1_TextStyle:{
+        fontSize: 15,
+        fontWeight: "300",
+        textShadowColor: "#fb5b5a",
+        textShadowOffset: {width: -1, height:1},
+    },
+    touchOpacity2_Style:{
+        width: "70%",
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: '#fb5b5a',
+        alignItems: 'center',
+        justifyContent:"center",
+        marginBottom: 20,
+    }
+})

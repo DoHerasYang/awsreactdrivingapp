@@ -71,12 +71,12 @@ export default class ForgetPasswordScreen extends React.Component {
         const {username,password,authCode} = this.state
         await Auth.forgotPasswordSubmit(username, authCode, password)
             .then(()=>{
-                this.props.navigation.navigate('Login')
-                console.log({username}+' Successfully Change the New Password')
+                this.props.navigation.navigate('Login');
+                console.log({username}+' Successfully Change the New Password');
             })
             .catch(error=>{
-                console.log('Error!',error)
-                Alert.alert('Error!',error)
+                console.log('Error!',error);
+                Alert.alert('Error!',error);
             })
     }
 
