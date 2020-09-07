@@ -5,16 +5,31 @@ Amplify.configure(awsconfig);
 
 // Query the remote database
 const listName = `
-  query {
-    listUserinfos{
-      items{
+  query ListUserinfos(
+    $filter: ModeluserinfoFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUserinfos(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
         id
         account
+        title
         firstname
         lastname
+        agegroup
+        ethnicity
+        postcode
+        date_of_birth
+        email
+        driving_period
+        commuting_behavior
+        createdAt
+        updatedAt
       }
+      nextToken
     }
- }
+  }
 `
 
 const uploadGeo = `
@@ -44,8 +59,14 @@ const uploadGeo = `
 // Mutation the New data to remote server
 export async function Query_UserName(cur_account){
     try {
-        const gql = await API.graphql(graphqlOperation(listName));
-        return gql.data.listUserinfos.items
+        const gql = await API.graphql(graphqlOperation(listName,{
+            filter:{
+                account:{
+                    eq:cur_account,
+                }
+            }
+        }));
+        return gql.data.listUserinfos.items;
     }catch (e) {
         console.log(e);
     }

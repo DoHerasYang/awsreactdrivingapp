@@ -6,6 +6,7 @@ import {
     InteractionManager,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import {current_username} from "./Login";
 
 // Import AWS Configure
 import Amplify from '@aws-amplify/core';
@@ -54,17 +55,8 @@ export default class AuthLoad extends React.Component {
 
     // Component Status => Use the componentDidMount function
     async componentDidMount() {
-        await this.Obtain_User();
         await this.Check_UserInfo()
             .then(this.loadLogin());
-    }
-
-    // Obtain the Username
-    async Obtain_User(){
-        await AsyncStorage.getItem('CurrentUser')
-            .then(value => this.setState({
-                username:value
-            }));
     }
 
     async Check_UserInfo(){
@@ -72,7 +64,7 @@ export default class AuthLoad extends React.Component {
             await API.graphql(graphqlOperation(listUserinfos,{
                 filter:{
                     account:{
-                        eq: this.state.username
+                        eq: current_username
                     }
                 }
             }))

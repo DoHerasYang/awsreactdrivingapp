@@ -20,6 +20,8 @@ import Amplify from '@aws-amplify/core';
 import config from '../../aws-exports';
 import AsyncStorage from "@react-native-community/async-storage";
 
+import {current_username} from "../Login";
+
 export let uuid = null;
 
 Amplify.configure(config)
@@ -83,14 +85,14 @@ export default class UserScreen extends React.Component{
     }
 
     obtain_Name = async() =>{
-        const gqldata = await Query_UserName();
+        const gqldata = await Query_UserName(current_username);
         this.setState({
             user_profile: gqldata,
         });
-        this.state.user_profile.map((pet,index) =>(
+        this.state.user_profile.map((user,index) =>(
             this.setState({
-                user_name: pet.firstname+' '+pet.lastname,
-                uuid: pet.id,
+                user_name: user.firstname+' '+user.lastname,
+                uuid: user.id,
             })
         ))
         uuid = this.state.uuid;
@@ -145,7 +147,8 @@ export default class UserScreen extends React.Component{
                         <Text style={styles.username_Style}>{this.state.temperature}°C    {this.state.city_name}</Text>
                     </View>
                     <TouchableOpacity
-                        style={styles.report_buttonStyle}>
+                        style={styles.report_buttonStyle}
+                        onPress={()=>this.props.navigation.navigate("Report")}>
                         <Text>View the Detailed Report</Text>
                     </TouchableOpacity>
                     <View style={styles.tip_Style}>

@@ -31,12 +31,13 @@ export default class Login extends React.Component {
         buttonfadeInOpacity: new Animated.Value(0),
         buttonHeightY: new Animated.Value(height),
         activityLabel: true,
-        username: '',
-        password: '',
+        username: "",
+        password: "",
         auth_label: false,
-        app_load: false,
         indicator_label: false,
         intensity_value: 0,
+        checkStatus: false,
+        continueLabel: true,
     };
 
     // Constructor
@@ -98,7 +99,7 @@ export default class Login extends React.Component {
             <View style={navigationStyles.container}>
                 <Animated.Image
                     style={{resizeMode: "cover", opacity: this.state.fadeInOpacity, height: 230, width: 330, top: height*0.25, left: 20}}
-                    source={require("../assets/splash.png")}/>
+                    source={require("../assets/splash_white.png")}/>
                 <Animated.View style={[navigationStyles.bottomView_Style,{ opacity:this.state.buttonfadeInOpacity, top:this.state.buttonHeightY}]}>
                     <Text style={navigationStyles.hintText_Style}>Don't Have Account?</Text>
                     <TouchableOpacity style={navigationStyles.touchOpacity1_Style}
@@ -123,6 +124,7 @@ export default class Login extends React.Component {
                 await AsyncStorage.clear();
                 await AsyncStorage.setItem('CurrentUser', username);
                 await AsyncStorage.setItem('default', '1');
+                await AsyncStorage.setItem('AppStatus',"false");
             }
             // await AsyncStorage.setItem('default', '0');
             // await AsyncStorage.removeItem('default');
@@ -133,33 +135,66 @@ export default class Login extends React.Component {
     }
 
     async handleSubmit(event){
-        current_username = this.state.username;
-        const {username,password} = this.state;
-        this.setState({
-            intensity_value: 78,
-            indicator_label: true,
-        })
-        try {
-            await this.StoreData(this.state.username);
-            await Auth.signIn(username,password)
-                .then((user)=>{
-                    this.props.navigation.navigate('AuthLoad')
-                    this.setState({
-                        intensity_value: 0,
-                        indicator_label: false,
-                        password: '',
-                    })
-                })
-        }catch (e) {
+
+        if(this.state.username.length === 0 || this.state.password.length === 0) {
             this.setState({
-                intensity_value: 0,
-                password: '',
-                indicator_label: false,
+                checkStatus: true,
+                continueLabel: false,
             });
-            alert(e.message);
+        }else{
+            current_username = this.state.username;
+            const {username,password} = this.state;
+            try {
+                this.setState({
+                    intensity_value: 78,
+                    indicator_label: true,
+                });
+                await this.StoreData(this.state.username);
+                await Auth.signIn(username,password)
+                    .then((user)=>{
+                        this.props.navigation.navigate('AuthLoad')
+                        this.setState({
+                            intensity_value: 0,
+                            indicator_label: false,
+                            password: '',
+                        })
+                    })
+            }catch (e) {
+                this.setState({
+                    intensity_value: 0,
+                    password: '',
+                    indicator_label: false,
+                });
+                alert(e.message);
+            }
         }
     }
 
+    // Check the Format of the Username
+    _CheckUsernameStatus(){
+        if(this.state.username.length === 0 && this.state.checkStatus){
+            return(
+                this.state.checkStatus? <Text style={{color:"red",marginTop: -20,marginBottom:20}}>Invalid Username</Text>:<Text style={{marginTop: -20,marginBottom:20}}> </Text>
+            )
+        }
+    }
+
+    _CheckPasswordStatus(){
+        if(this.state.password.length === 0 && this.state.checkStatus ){
+            return(
+                this.state.checkStatus? <Text style={{color:"red",marginTop: -20,marginBottom:20}}>Invalid Password</Text>:<Text style={{marginTop: -20,marginBottom:20}}> </Text>
+            )
+        }
+    }
+
+    // optimization page performance
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+
+        if(this.state.auth_label !== nextState.auth_label){
+            return false
+        }
+        return true
+    }
 
     // Class render function
     render() {
@@ -183,6 +218,7 @@ export default class Login extends React.Component {
                         autoCorrect={false}
                         onChangeText={(username) => this.setState({username})}/>
                 </View>
+                {this._CheckUsernameStatus()}
                 <View style={styles.inputView}>
                     <TextInput
                         value={this.state.password}
@@ -195,6 +231,7 @@ export default class Login extends React.Component {
                         autoCorrect={false}
                         onChangeText={(password) => this.setState({password})}/>
                 </View>
+                {this._CheckPasswordStatus()}
                 <TouchableOpacity
                     onPress={() => navigate('ForgetPassword')}>
                     <Text style={styles.forgot}>Forgot Password?</Text>

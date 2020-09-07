@@ -19,6 +19,7 @@ import AuthLoadScreen from "./container/AuthLoad";
 // User Pages
 import UserScreen from "./container/user/UserScreen";
 import SettingPage from "./container/user/SettingScreen";
+import ReportScreen from "./container/user/ReportScreen";
 import GEO_Function from "./container/function/GEO_Function";
 
 // import the icons
@@ -152,7 +153,9 @@ function MyAppStack({initialRouteName}){
             <Stack.Screen
                 name="Login"
                 component={Login}
-                options={{ title: 'My home',headerShown: false, }}
+                options={{
+                    title: 'My home',
+                    headerShown: false, }}
             />
             <Stack.Screen
                 name='ForgetPassword'
@@ -219,6 +222,27 @@ function MyAppStack({initialRouteName}){
                 }}
             />
             <Stack.Screen
+                name='Report'
+                component={ReportScreen}
+                options={{
+                    title:'My Report',
+                    headerShown: true,
+                    headerBackTitle: 'Back',
+                    headerStyle:{
+                        backgroundColor: '#290066',
+                        shadowColor: 'transparent',
+                        shadowRadius: 0,
+                        shadowOffset: {
+                            height: 0,
+                        }
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle:{
+                        fontWeight: 'bold',
+                    }
+                }}
+            />
+            <Stack.Screen
                 name='GEO'
                 component={GEO_Function}
                 options={{
@@ -259,7 +283,7 @@ export default function App() {
         return (
             <NavigationContainer>
                 <MyAppStack
-                    initialRouteName={"Login"}/>
+                    initialRouteName={"ReportScreen"}/>
             </NavigationContainer>
         );
     }else{
