@@ -9,7 +9,10 @@ import {
     Image,
     Dimensions,
     ActivityIndicator,
+    DeviceEventEmitter,
 } from 'react-native';
+import * as Permissions from 'expo-permissions';
+import * as Notifications from 'expo-notifications';
 
 import {obtain_WeatherJson} from "../function/Weather_Info";
 import {obtain_tips} from "../function/Tips_Funtion";
@@ -21,13 +24,27 @@ import config from '../../aws-exports';
 import AsyncStorage from "@react-native-community/async-storage";
 
 import {current_username} from "../Login";
-
 export let uuid = null;
 
 Amplify.configure(config)
 
 // Global Variables for application
 export let Username = null;
+let notification_content = null;
+
+const weather_condition = [
+    "Mist",
+    "Haze",
+    "Dust",
+    "Fog",
+    "Tornado",
+    "Squall",
+    "Snow",
+    "Rain",
+    "Thunderstorm",
+    "Drizzle",
+];
+
 
 export default class UserScreen extends React.Component{
 
@@ -37,6 +54,7 @@ export default class UserScreen extends React.Component{
         temperature: null,
         city_name: null,
         uuid: null,
+        currentweather: null,
     }
 
     // The function to reconfirm the user preference
@@ -81,7 +99,7 @@ export default class UserScreen extends React.Component{
         this.setState({
             temperature : current_temperature["main"].temp.toFixed(1),
             city_name: current_temperature["name"],
-        })
+        });
     }
 
     obtain_Name = async() =>{
@@ -102,6 +120,12 @@ export default class UserScreen extends React.Component{
     async componentDidMount(){
         await this.obtain_Name();
         await this.obtain_temp();
+        await this._registerForPushNotifications();
+        this.timer = setTimeout(()=>{
+            this.Weather_Alert();
+            },
+            1000000,
+        );
         AsyncStorage.getItem('default',(error,result)=>{
             if(result === 1){
                 Alert.alert(
@@ -122,7 +146,69 @@ export default class UserScreen extends React.Component{
                     { cancelable: false}
                 )
             }
+        });
+    }
+
+    // Notification Part of this Application
+    // Obtain the Permission of the application for notification
+     async _allowsNotificationsAsync(){
+        return await Notifications.requestPermissionsAsync({
+            android:{},
+            ios:{
+                allowAnnouncements: true,
+                allowBadge: true,
+                allowAlert: true,
+            }
         })
+    }
+
+    // Obtain the Expo Notification Tokens
+    _registerForPushNotifications = async() => {
+        // Check the Notification status
+        const {status: existingStatus} = await Notifications.getPermissionsAsync();
+        let currentStatus = existingStatus;
+        if (!existingStatus.granted) {
+            await this._allowsNotificationsAsync();
+            currentStatus = await Notifications.getPermissionsAsync();
+            if (!currentStatus.granted) {
+                return Promise.resolve();
+            }
+        }
+        // Add a New Listener
+        if (await AsyncStorage.getItem("weather_value")){
+            this.weather_listener = DeviceEventEmitter.addListener("WeatherAlert", () => {
+                Notifications.setNotificationHandler({
+                    handleNotification: async () => ({
+                        shouldShowAlert: true,
+                        shouldSetBadge: true,
+                    }),
+                });
+                Notifications.scheduleNotificationAsync({
+                    content: {
+                        title: 'Bad weather Alert',
+                        body: notification_content,
+                    },
+                    trigger: null,
+                });
+            });
+        }
+    }
+
+    // Weather Alert Condition Function
+    Weather_Alert = async() =>{
+        let current_weather = await obtain_WeatherJson();
+        if(current_weather["visibility"] < 1000){
+            notification_content = "The Visibility of Road is less than 1KM ";
+            DeviceEventEmitter.emit("WeatherAlert");
+        }
+        if(current_weather["wind"]["speed"]>20){
+            notification_content = "Strong Wind Alert ";
+            DeviceEventEmitter.emit("WeatherAlert");
+        }
+        if(current_weather["weather"][0]["main"] in weather_condition){
+            notification_content = "Alert: " + current_weather["weather"][0]["description"];
+            DeviceEventEmitter.emit("WeatherAlert");
+        }
     }
 
     GEO_Navigation(){
@@ -131,6 +217,20 @@ export default class UserScreen extends React.Component{
             {
                 screen: 'GEO_Function',
             });
+    }
+
+    // Improve the Optimization of the Application
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        if(this.state.currentweather !== nextState.currentweather || this.state.uuid !== nextState.uuid){
+            return false;
+        }
+        return true;
+    }
+
+    // Deal with the listener
+    componentWillUnmount() {
+        this.timer && clearTimeout(this.timer);
+        this.weather_listener && DeviceEventEmitter.removeSubscription(this.weather_listener);
     }
 
     render() {

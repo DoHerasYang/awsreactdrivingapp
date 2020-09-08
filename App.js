@@ -186,6 +186,7 @@ function MyAppStack({initialRouteName}){
                             height: 0,
                         }
                     },
+                    headerBackTitle: 'Back',
                     headerTintColor: 'white',
                 }}
             />
@@ -283,7 +284,7 @@ export default function App() {
         return (
             <NavigationContainer>
                 <MyAppStack
-                    initialRouteName={"ReportScreen"}/>
+                    initialRouteName={"Login"}/>
             </NavigationContainer>
         );
     }else{

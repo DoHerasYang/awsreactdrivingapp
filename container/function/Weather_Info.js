@@ -2,12 +2,12 @@ import React from 'react';
 import * as Location from 'expo-location';
 
 export async function obtain_Location(){
-
+    let { existingStatus } = await Location.requestPermissionsAsync();
     let { status } = await Location.getPermissionsAsync();
     if(status!=="granted"){
         console.log("Permission to access location was denied")
     }
-    let location =  await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Highest})
+    let location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Highest})
     return location
 }
 

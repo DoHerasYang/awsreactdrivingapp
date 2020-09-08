@@ -27,8 +27,7 @@ export default class HomeScreen extends React.Component {
     // toggleSwitch = (tag,value) => {
     //     this.setState({[tag]: value});
     // }
-
-
+    
     constructor() {
         super();
         this.Initialize_Keys();

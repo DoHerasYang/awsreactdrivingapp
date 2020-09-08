@@ -98,6 +98,7 @@ export default class UserInfo extends Component{
                             <Content>
                                 {/*header*/}
                                 <View style={style_ScrollView.header_View}>
+                                    <Text style={style_ScrollView.header_Text}>Welcome!</Text>
                                     <Text style={style_ScrollView.header_Text}>Create Your New Profile</Text>
                                 </View>
                                 <Form style={style_ScrollView.form_Style}>
@@ -135,7 +136,7 @@ export default class UserInfo extends Component{
                                     {/*lastname*/}
                                     <Item style={style_ScrollView.input_ItemStyle}>
                                         <Form style={style_ScrollView.sec_TextStyle}>
-                                            <Label style={{marginTop:19,color:"white"}}>Last Name</Label>
+                                            <Label style={{marginTop:19}}>Last Name</Label>
                                         </Form>
                                         <Input
                                             style={style_ScrollView.input_Style}
@@ -150,7 +151,7 @@ export default class UserInfo extends Component{
                                     {/*ageGroup*/}
                                     <Item style={style_ScrollView.input_ItemStyle}>
                                         <Form style={style_ScrollView.sec_ItemStyle}>
-                                            <Label style={{marginTop:19,color:"white"}}>Age Group</Label>
+                                            <Label style={{marginTop:19}}>Age Group</Label>
                                         </Form>
                                         <Picker
                                             placeholder="Age Group"
@@ -171,7 +172,7 @@ export default class UserInfo extends Component{
                                     {/*PostCode*/}
                                     <Item style={style_ScrollView.input_ItemStyle} inlineLabel>
                                         <Form style={style_ScrollView.sec_TextStyle}>
-                                            <Label style={{marginTop:19,color:"white"}}>PostCode</Label>
+                                            <Label style={{marginTop:19}}>PostCode</Label>
                                         </Form>
                                         <Input
                                             style={style_ScrollView.input_Style}
@@ -186,7 +187,7 @@ export default class UserInfo extends Component{
                                     <Item style={style_ScrollView.input_ItemStyle}>
                                         <Form style={style_ScrollView.sec_DateStyle}>
                                             <Form style={{marginLeft:5,marginRight:35,alignItems:'center',}}>
-                                                <Label style={{marginTop:19,color:"white"}}>Date Of Birth</Label>
+                                                <Label style={{marginTop:19}}>Date Of Birth</Label>
                                             </Form>
                                             <Form style={{marginTop:10}}>
                                                 <DatePicker
@@ -203,7 +204,7 @@ export default class UserInfo extends Component{
                                     {/*Email*/}
                                     <Item style={style_ScrollView.input_ItemStyle} inlineLabel>
                                         <Form style={style_ScrollView.sec_TextStyle}>
-                                            <Label style={{marginTop:19,color:"white"}}>Email</Label>
+                                            <Label style={{marginTop:19}}>Email</Label>
                                         </Form>
                                         <Input
                                             style={style_ScrollView.input_Style}
@@ -217,7 +218,7 @@ export default class UserInfo extends Component{
                                     {/*Time Of Driving*/}
                                     <Item style={style_ScrollView.input_ItemStyle}>
                                         <Form style={style_ScrollView.sec_ItemStyle}>
-                                            <Label style={{marginTop:19,color:"white"}}>Time of Driving</Label>
+                                            <Label style={{marginTop:19}}>Time of Driving</Label>
                                         </Form>
                                         <Picker
                                             placeholder="Time of Driving"
@@ -236,7 +237,7 @@ export default class UserInfo extends Component{
                                     {/*Time Of Commuting*/}
                                     <Item style={style_ScrollView.input_ItemStyle}>
                                         <Form style={style_ScrollView.sec_ItemStyle}>
-                                            <Label style={{marginTop:19,color:"white"}}>Commuting</Label>
+                                            <Label style={{marginTop:19}}>Commuting</Label>
                                         </Form>
                                         <Picker
                                             placeholder="Commuting Hours"
@@ -246,10 +247,10 @@ export default class UserInfo extends Component{
                                             style={{ height: 40, width:180, marginBottom:-20}}
                                             selectedValue={this.state.commuting_behavior}
                                             onValueChange={(value)=>this.setState({commuting_behavior:value})}>
-                                            <Picker.Item label="less 1 Hour" value="1-"/>
-                                            <Picker.Item label="1-2 Hours" value="1-2"/>
-                                            <Picker.Item label="2-5 Hours" value="2-5"/>
-                                            <Picker.Item label="More Than 5 Hours" value="5+"/>
+                                            <Picker.Item label="less 1 Hour - daily" value="1-"/>
+                                            <Picker.Item label="1-2 Hours - daily" value="1-2"/>
+                                            <Picker.Item label="2-5 Hours - daily" value="2-5"/>
+                                            <Picker.Item label="More Than 5 Hours - daily" value="5+"/>
                                         </Picker>
                                     </Item>
                                     <TouchableOpacity
@@ -269,11 +270,9 @@ export default class UserInfo extends Component{
 const style_ScrollView = StyleSheet.create({
     container:{
         flexGrow:1,
-        backgroundColor: "#290066",
     },
     container_Info:{
         flexGrow: 1,
-        backgroundColor: "#290066",
     },
     form_Style:{
         alignItems: 'center',
