@@ -39,7 +39,9 @@ export default class UserInfo extends Component{
 
     // Control the Scroll Function
     onContentSizeChange = (contentWidth,contentHeight) =>{
-        this.setState({screenHeight: contentHeight})
+        this.setState({
+            screenHeight: contentHeight
+        })
     }
 
     Obtain_CurrentDate(){
@@ -59,7 +61,9 @@ export default class UserInfo extends Component{
 
     async Fetch_LocalUser(){
         await AsyncStorage.getItem('CurrentUser')
-            .then(value => this.setState({account: value}))
+            .then(value => this.setState({
+                account: value
+            }));
     }
 
     async Submit_Info(){

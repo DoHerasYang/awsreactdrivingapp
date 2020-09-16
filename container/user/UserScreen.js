@@ -197,6 +197,13 @@ export default class UserScreen extends React.Component{
     // Weather Alert Condition Function
     Weather_Alert = async() =>{
         let current_weather = await obtain_WeatherJson();
+        if(current_weather["weather"][0]["id"] === this.state.currentweather["weather"][0]["id"]){
+            return Promise.resolve();
+        }else{
+            this.setState({
+                current_weather: current_weather,
+            });
+        }
         if(current_weather["visibility"] < 1000){
             notification_content = "The Visibility of Road is less than 1KM ";
             DeviceEventEmitter.emit("WeatherAlert");

@@ -60,7 +60,7 @@ export default class WelcomePages extends React.Component{
                     onTouchStart={this._Navigation_Jump}>
                     <View style={styles.slide1_Container}>
                         <ImageBackground source={require("../assets/slide1_background.jpeg")} style={styles.slide_Background}>
-                            <Image source={require("../assets/slide1_1.png")} style={styles.slide1_Image}/>
+                            <Image source={require("../assets/slide1.png")} style={styles.slide1_Image}/>
                             <View style={{marginTop: 60, alignItems:'center'}}>
                                 <Text style={styles.slide1_Text}>Friendly and Simple Interface</Text>
                                 <Text style={styles.slide1_1_Text}> Everybody feels comfortable to use this application...</Text>
@@ -70,11 +70,11 @@ export default class WelcomePages extends React.Component{
                     </View>
                     <View style={styles.slide2_Container}>
                         <ImageBackground source={require("../assets/slide1_background.jpeg")} style={styles.slide_Background}>
-                            <Image source={require("../assets/slide1_1.png")} style={styles.slide1_Image}/>
+                            <Image source={require("../assets/slide2.png")} style={styles.slide1_Image}/>
                             <View style={{marginTop: 60, alignItems:'center'}}>
-                                <Text style={styles.slide1_Text}>Friendly and Simple Interface</Text>
-                                <Text style={styles.slide1_1_Text}> Everybody feels comfortable to use this application...</Text>
-                                <Text style={styles.slide1_1_Text}> Even when you are focusing on driving</Text>
+                                <Text style={styles.slide1_Text}>No Distraction from Driving</Text>
+                                <Text style={styles.slide1_1_Text}> Drivers can monitor their driving easily</Text>
+                                <Text style={styles.slide1_1_Text}> via clicking one single button</Text>
                             </View>
                         </ImageBackground>
                     </View>
